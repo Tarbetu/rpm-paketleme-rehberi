@@ -1,0 +1,20 @@
+[[Neden-Yazilimlari-RPM-ile-Paketlemeliyiz]]
+= Neden Yazılımları RPM ile Paketlemeliyiz? 
+
+RPM Paket Yöneticisi (RPM), Red Hat Enterprise Linux, CentOS ve Fedora'da kullanılan bir paket yönetim sistemidir. RPM, bahsi edilen bu dağıtımlar üzerinde yazılımlarızı dağıtmaya, yönetmeye ve güncellemeye yardımcı olur. Pek çok yazılımcı bir gelenek olarak kendi yazılımlarını tarball olarak da bilinen arşiv dosyaları aracılığıyla dağıtır. Buna karşın, yazılımları RPM formatında paketlemenin pek çok faydası vardır. Bu faydalar, aşağıda şu şekilde anlatılmıştır.
+
+RPM ile şunları yapabilirsiniz:
+
+Paketleri kurma, yeniden kurma, kaldırma, güncelleme ve onaylama::
+Kullanıcılar, standart paket yönetim araçlarıyla (Yum veya PackageKit gibi) sizin RPM paketleriyle kurabilir, yeniden kurabilir, kaldırabilir ve onaylayabilir. 
+Paketleri onaylamak ve sıralamak için kurulmuş paketlerin bir veritabanını kurma::
+RPM'in kurulmuş paketler ve onların dosyaları için sağladığı veritabanı sayesinde kullanıcılar, kendi sistemlerindeki paketlerini rahatlıkla sıralayabilir ve onaylayabilir.
+Paketlerinizi açıklamak, onların kurulum talimatlarını anlatmak ve buna benzer işler için üstverileri (metadata) kullanın::
+Her bir RPM paketi kendi paketinin öğeleri, versiyonu, yayın numarasını, büyüklüğünü, proje adresini ve kurulum talimatları gibi pek çok bilgiyi vermek için bir üstveri (metadata) içerir.
+
+Saf yazılım kaynakları aracılığıyla paketinizi kaynak ve ikili hâlde paketleyin::
+RPM, saf yazılım kaynağına erişmenize ve onları ikili ve kaynak paketler hâlinde kullanıcılarınıza iletmenize izin verir. Kaynak paketlerde saf kaynaklara üzerine uygulanmış kodlarla ve derleme talimatlarına erişebilirsiniz. Bu tasarım, yazılımların yeni sürümleri yayınlandıkça yeni sürümlerin yayınlanabilirliğini kolaylaştırır. 
+Yum depolarına paketler ekleyin::
+Paketlerinizi alıcılarınızın kolaylıkla paketlerinizi bulup kurabileceği Yum depolarına ekleyebilirsiniz. 
+Paketlerinizi dijital olarak imzalayın::
+GPG imza anahtarı aracılığıyla, paketlerinizi dijital olarak imzalayabilirsiniz. Böylece kullanıcılar paketlerinizin güvenilirliğini onaylayabilir. 

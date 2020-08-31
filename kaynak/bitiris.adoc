@@ -1,0 +1,7 @@
+[ekleme]
+= Bitiriş
+
+Bu kitabın orijinaline link:https://rpm-packaging-guide.github.io/[RPM Packaging Guide] bağlantısından ulaşabilirsiniz. 
+Belgenin orijinali ve çevirisi link:https://creativecommons.org/licenses/by-sa/3.0/deed.tr[Atıf-AynıLisanslaPaylaş 3.0 Yerelleştirilmemiş (CC BY-SA 3.0)] ile lisanslanmıştır. 
+Belgenin telif hakkı orijinal metindeki isimlere aittir. 
+Çeviri: Emrecan Şuşter

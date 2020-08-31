@@ -1,0 +1,65 @@
+[[merhaba-dunya]]
+= İlk RPM Paketiniz
+
+Bir RPM paketi kurgulamak gayet karmaşık olabilir. Daha anlaşılır olması açısından burada sadeleştirilmiş ve bazı noktaları atlanmış bir RPM Spec dosyası hazırladık. 
+
+[source,specfile]
+----
+Name:       merhaba-dunya
+Version:    1
+Release:    1
+Summary:    Epey sade bir RPM paketi
+License:    FIXME
+
+%description
+Bu benim ilk RPM paketim. Süs bitkisi niyetine sisteminize kurabilirsiniz.   
+
+%prep
+# bir kaynağımız yok, hâliyle buraya hiçbir şey eklemedik. 
+%build
+cat > merhaba-dünya.sh <<EOF
+#!/usr/bin/bash
+echo Merhaba dünya
+EOF
+
+%install
+mkdir -p %{buildroot}/usr/bin/                                                                                                                                                      
+install -m 755 merhana-dünya.sh %{buildroot}/usr/bin/merhaba-dünya.sh
+
+%files
+/usr/bin/merhaba-dünya.sh
+
+%changelog
+# Şimdilik boş verin gitsin
+----
+
+Bu dosyayı ``merhaba-dunya.spec`` ismiyle kaydedin.
+
+Ardından, şu komutları kullanın: 
+
+[source,bash]
+----
+$ rpmdev-setuptree
+$ rpmbuild -ba merhaba-dunya.spec
+
+----
+
+``rpmdev-setuptree`` isimli komut çeşitli çalışma dizinleri hazırlar. 
+Bu dizinler, ev dizininizde ($HOME) saklanacağı için bu komutun bir kere kullanılması yeterlidir. 
+
+``rpmbuild`` komutu ise rpm paketini hazırlar. Bu komutun çıktı şöyle bir şeye benzer:
+
+[source,txt]
+----
+... [KESTİK!] 
+Wrote: /home/mirek/rpmbuild/SRPMS/merhaba-dunya-1-1.src.rpm
+Wrote: /home/mirek/rpmbuild/RPMS/x86_64/merhaba-dunya-1-1.x86_64.rpm
+Executing(%clean): /bin/sh -e /var/tmp/rpm-tmp.wgaJzv
++ umask 022
++ cd /home/mirek/rpmbuild/BUILD
++ /usr/bin/rm -rf /home/mirek/rpmbuild/BUILDROOT/merhaba-dunya-1-1.x86_64
++ exit 0
+----
+
+``/home/mirek/rpmbuild/RPMS/x86_64/merhaba-dunya-1-1.x86_64.rpm`` sizin ilk RPM paketinizdir. 
+Sisteminize kurabilir ve test edebilirsiniz. 

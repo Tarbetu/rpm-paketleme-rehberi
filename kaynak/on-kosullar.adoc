@@ -1,0 +1,40 @@
+[[on-kosullar]]
+= Ön Koşullar
+
+Bu kılavuzu takip etmek için bazı paketlere ihtiyacınız olacak.
+To follow this tutorial, you need the packages mentioned below.
+
+ifdef::community[]
+NOTE: Bazı paketler varsayılan olarak şu sistemlerde kuruludur:
+https://getfedora.org/[Fedora], https://www.centos.org/[CentOS] ve
+https://www.redhat.com/en/technologies/linux-platforms[RHEL]. 
+Bu paketler hangi araçların kullanıldığını açıkça göstermek için listelenmiştir. 
+endif::community[]
+
+ifdef::rhel[]
+NOTE: İhtiyaç duyulan paketlerden bazıları https://www.redhat.com/en/technologies/linux-platforms[RHEL] sisteminizde kuruludur. 
+Bu paketler hangi araçların kullanıldığını açıkça göstermek için listelenmiştir. 
+endif::rhel[]
+
+ifdef::community[]
+Fedora, CentOS 8 ve RHEL 8 üzerinde:
+
+[source,bash]
+----
+$ dnf install gcc rpm-build rpm-devel rpmlint make python bash coreutils diffutils patch rpmdevtools
+----
+
+CentOS 7 ve RHEL 7 üzerinde:
+
+[source,bash]
+----
+$ yum install gcc rpm-build rpm-devel rpmlint make python bash coreutils diffutils patch rpmdevtools
+----
+endif::community[]
+
+ifdef::rhel[]
+[source,bash]
+----
+$ yum install gcc rpm-build rpm-devel rpmlint make python bash coreutils diffutils patch rpmdevtools
+----
+endif::rhel[]

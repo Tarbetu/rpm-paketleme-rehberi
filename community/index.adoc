@@ -1,0 +1,29 @@
+= RPM Paketleme Rehberi
+Adam Miller, Maxim Svistunov, Marie Doleželová, et al.
+Çeviri: Emrecan Şuşter
+:imagesdir: images
+:toc: left
+:toclevels: 3
+:doctype: book
+:source-highlighter: coderay
+:community:
+
+include::kaynak/tanitim.adoc[leveloffset=+1]
+
+include::kaynak/on-kosullar.adoc[leveloffset=+1]
+
+include::kaynak/Neden-Yazilimlari-RPM-ile-Paketlemeliyiz.adoc[leveloffset=+1]
+
+include::kaynak/merhaba-dunya.adoc[leveloffset=+1]
+
+include::kaynak/yazilimi-hazirlamak.adoc[leveloffset=+1]
+
+include::kaynak/yazilimi-paketlemek.adoc[leveloffset=+1]
+
+include::kaynak/gelismis-konular.adoc[leveloffset=+1]
+
+include::kaynak/rhel7-ozellikleri.adoc[leveloffset=+1]
+
+include::kaynak/referans.adoc[leveloffset=+1]
+
+include::kaynak/bitiris.adoc[leveloffset=+1]

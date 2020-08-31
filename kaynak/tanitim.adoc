@@ -1,0 +1,70 @@
+[[tanitim]]
+= Tanıtım
+
+RPM Paketleme açıklayıcı dokümanları: 
+
+Kaynak kodunu RPM paketlemek için hazırlamak.:: Yazılım geliştirmek konusunda hiçbir fikriniz yoksa sizi şöyle alalım: 
+xref:yazilimi-paketlemeye-hazirlamak[].
+
+Kaynak kodunu RPM olarak paketlemek.:: Bu kısım paketlerini RPM olarak paketlemek isteyen yazılımcılar içindir. Buyrun:
+xref:yazilim-paketlemek[].
+
+Gelişmiş paketleme senaryoları.:: Bu kısım, RPM paketçilerinin karşısına çıkan 
+zorlu RPM paketleme senaryoları için bir kaynakçadır. xref:ileri-duzey-konular[] kısmını inceleyin.
+
+//ifdef::community[]
+//[[pdf-version]]
+//== PDF Version
+
+//Dilerseniz şu adresten PDF versiyonunu inceleyebilirsiniz:
+//https://rpm-packaging-guide.github.io/rpm-packaging-guide.pdf
+//endif::community[]
+//
+//[[document-conventions]]
+== Dokümasyon Anahtarları
+
+Bu doküman anlatımı kolaylaştırmak üzere şöyle anahtarlar kullanır:
+
+* Bloklar hâlindeki yerleştirilmiş kaynak kodlarını içeren, komut çıktısını ve içeriğini barındıran metin dosyaları (Kötü çeviri):
+//* Command output and contents of text files, including source code, are placed
+//in blocks:
++
+[source,bash]
+----
+$ tree ~/rpmbuild/
+/home/user/rpmbuild/
+|-- BUILD
+|-- RPMS
+
+[komut çıktısı sadeleştirildi]
+----
++
+[source,txt]
+----
+Name:           bello
+Version:
+Release:        1%{?dist}
+Summary:
+
+[komut çıktısı sadeleştirildi]
+----
++
+[source,python]
+----
+#!/usr/bin/env python
+
+print("Merhaba Dünya")
+----
+
+* Kendisine has anlamları olan konular veya başka bir sitedeki kaynakla ilişkili terimler **kalınla** ya da __eğik yazıyla__ gösterilir. 
+
+ifdef::topluluk[]
+Bazı terimlerle ilk kez karşılaşıldığı zaman ilgili belgeye yönlendirilir.
+//The first occurrences of some terms link to their respective documentation.
+endif::topluluk[]
+
+*   Bazı yazılımlar, komutlar ve komut içerisinde bulunabilecek şeyler ``eş aralıklı`` fontlarla gösterilir. 
+
+ifdef::topluluk[]
+include::bu-belgeye-destek-olmak.adoc[leveloffset=+1]
+endif::topluluk[]
