@@ -1,7 +1,7 @@
-Name:           cello
+Name:           celaba
 Version:        1.0
 Release:        1%{?dist}
-Summary:        Hello World example implemented in C
+Summary:        C ile Yazılmış Bir Merhaba Dünya örneği
 
 License:        GPLv3+
 URL:            https://www.example.com/%{name}
@@ -13,8 +13,10 @@ BuildRequires:  gcc
 BuildRequires:  make
 
 %description
-The long-tail description for our Hello World Example implemented in
-C.
+C ile yazılmış Merhaba Dünya örneği için 
+satırlara sığmayan
+epey uzun bir 
+tanıtım yazısı
 
 %prep
 %setup -q
@@ -34,5 +36,7 @@ make %{?_smp_mflags}
 
 
 %changelog
+* Tue Sep 1 2020 Emrecan Şuşter <emrecansuster@lilyum.org> - 1.0-1
+- Türkçeleştirildi. 
 * Tue May 31 2016 Adam Miller <maxamillion@gmail.com> - 1.0-1
 - First cello package

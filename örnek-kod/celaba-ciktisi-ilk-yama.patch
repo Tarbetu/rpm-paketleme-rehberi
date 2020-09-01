@@ -1,0 +1,10 @@
+--- celaba.c.orig	2016-06-13 16:39:56.482961014 -0500
++++ celaba.c	2016-06-13 16:39:13.141290265 -0500
+@@ -1,6 +1,6 @@
+ #include<stdio.h>
+ 
+ int main(void){
+-    printf("Merhaba Dünya!\n");
++    printf("Yeni yamamdan selam dünya!\n");
+     return 0;
+ }

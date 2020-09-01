@@ -1,7 +1,7 @@
-Name:           bello
+Name:           belaba
 Version:        0.1
 Release:        1%{?dist}
-Summary:        Hello World example implemented in bash script
+Summary:        Bash ile Yazılmış Bir Merhaba Dünya örneği
 
 License:        GPLv3+
 URL:            https://www.example.com/%{name}
@@ -12,8 +12,10 @@ Requires:       bash
 BuildArch:      noarch
 
 %description
-The long-tail description for our Hello World Example implemented in
-bash script.
+Bash ile yazılmış Merhaba Dünya örneği için 
+satırlara sığmayan
+epey uzun bir 
+tanıtım yazısı
 
 %prep
 %setup -q
@@ -32,5 +34,7 @@ install -m 0755 %{name} %{buildroot}/%{_bindir}/%{name}
 
 
 %changelog
+* Tue Sep 1 2020 Emrecan Şuşter <emrecansuster@lilyum.org> - 0.1-1
+- Türkçeleştirildi. 
 * Tue May 31 2016 Adam Miller <maxamillion@fedoraproject.org> - 0.1-1
 - First bello package
