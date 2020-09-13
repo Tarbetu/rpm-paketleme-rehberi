@@ -1,0 +1,1020 @@
+[[ileri-duzey-konular]]
+= İleri Düzey Konular
+
+Bu bölüm, giriş seviyesi rehberlerden daha ileri konuları ele alır ancak bu konular RPM paketlemenin gerçek hayattaki kullanımı için yararlı bilgiler içerir. 
+
+
+[[paketleri-imzalamak]]
+== Paketleri İmzalamak
+
+Paketleri imzalamak, son kullanıcı için paketi güvenilir kılmanın bir yoludur. Kurulumdan önce paketi indirdiğiniz zaman HTTPS protokolü uygulamasıyla güvenli iletim sağlanabilir. Fakat kimi zaman paketler önceden indirilip daha sonra kullanılmadan önce yerel depolarda saklanırlar. Daha önceden üçüncü parti tarafından içeriğinin değiştirilmediğine emin olmak için bu paketler imzalanır. 
+
+Paketleri imzalamanın üç yolu vardır:
+
+* xref:pakete-imza-eklemek[Hazır bir pakete imza eklemek]
+
+* xref:paket-imzasini-degistirmek[Hazır bir paketin imzasını değiştirmek]
+
+* xref:insa-zamani-imzalamak[İnşa zamanı paketi imzalamak]
+
+[[pakete-imza-eklemek]]
+=== Pakete İmza Eklemek
+
+Çoğu zaman paketler imzalanmadan inşa edilirler. Paketler yayınlanmadan önce imza eklenir. 
+
+Paketlere imza ekmek için, `--addsign` parametresini kullanın. Paketin birden fazla imzaya sahip olması, paketi inşa edenden son kullanıcıya kadar giden yolda kimden kime geçtiğinin kaydedilmesini mümkün kılar. 
+
+Mesela, bir şirketin bir bölümünün bir paketin oluşturduğunu ve bu bölümün anahtarıyla imzalandığını düşünün. Şirketin üst düzey yöneticileri bu paketi inceleyip onaylamak için kendi şirket imzalarını ekleyebilir. 
+
+Bu iki imza ile beraber, paket satıcıya ulaşır. Satıcı da imzaları ve paketi inceleyeyip kendi imzasını da üzerine ekleyebilir.
+
+Şimdi paketi dağıtmayı düşünen başka bir firmaya gidebilir. Bu paketteki her bir imzanın incelenmesinin ardından, bu şirket paketin orijinal kopyası olduğunu ve ilk kez oluşturulduktan sonra değiştirilmediğine emin olabilir. Dağıtımcı firmanın iç deneyimleri sonrasında, onlar da kendi imzalarını, firmalarından onay aldığını göstermek üzere eklemeyi düşünebilirler.
+
+`--addsign` çıktısı şu şekildedir:
+
+[source,bash]
+----
+$ rpm --addsign blather-7.9-1.i386.rpm
+            Enter pass phrase:
+
+Pass phrase is good.
+blather-7.9-1.i386.rpm:
+----
+
+Birden çok imzaya sahip paketi incelemek için: 
+
+[source,bash]
+----
+$ rpm --checksig blather-7.9-1.i386.rpm
+blather-7.9-1.i386.rpm: size pgp pgp md5 OK
+----
+
+`rpm --checksig` çıktısındaki `pgp` metni paketin daha önce iki kez imzalandığını belirtmektedir. 
+
+Aynı şekilde, RPM aynı imzanın birden fazla kez eklenebilmesine izin verir. `--addsign` parametresi imzaların birden fazla olup olmadığını denetlemez. 
+
+[source,bash]
+----
+$ rpm --addsig blather-7.9-1.i386.rpm
+              Enter pass phrase:
+
+Pass phrase is good.
+blather-7.9-1.i386.rpm:
+$ rpm --addsig blather-7.9-1.i386.rpm
+              Enter pass phrase:
+
+Pass phrase is good.
+blather-7.9-1.i386.rpm:
+$ rpm --addsig blather-7.9-1.i386.rpm
+              Enter pass phrase:
+
+Pass phrase is good.
+blather-7.9-1.i386.rpm:
+$ rpm --checksig blather-7.9-1.i386.rpm
+blather-7.9-1.i386.rpm: size pgp pgp pgp pgp md5 OK
+----
+
+`rpm --checksig` komutunun çıktısı dört imza sayacaktır. 
+
+The output of the `rpm --checksig` command displays four signatures.
+
+[[paket-imzasini-degistirmek]]
+=== Paket İmzasını Değiştirmek
+
+Paketi yeniden inşa etmeden imzasını değiştirmek için, `--resign` parametresini kullanın.
+
+[source,bash]
+----
+$ rpm --resign blather-7.9-1.i386.rpm
+            Enter pass phrase:
+
+Pass phrase is good.
+blather-7.9-1.i386.rpm:
+----
+
+`--resign` parametresini birden çok paket dosyası üzerinde kullanmak için:
+
+[source,bash]
+----
+$ rpm --resign b*.rpm
+            Enter pass phrase:
+
+Pass phrase is good.
+blather-7.9-1.i386.rpm:
+bother-3.5-1.i386.rpm:
+----
+
+[[insa-zamani-imzalamak]]
+=== İnşa zamanı imzalamak
+
+İnşa zamanı esnasında bir paketi imzalamak için `rpmbuild` komutunu `--sign` parametresiyle kullanın. Bu, PGP parolasının (passphrase) girilmesini gerektirir. 
+
+Örnek:
+
+[source,bash]
+----
+$ rpmbuild -ba --sign blather-7.9.spec
+            Enter pass phrase:
+
+Pass phrase is good.
+* Package: blather
+…
+Binary Packaging: blather-7.9-1
+Finding dependencies...
+…
+Generating signature: 1002
+Wrote: /usr/src/redhat/RPMS/i386/blather-7.9-1.i386.rpm
+…
+Source Packaging: blather-7.9-1
+…
+Generating signature: 1002
+Wrote: /usr/src/redhat/SRPMS/blather-7.9-1.src.rpm
+----
+
+Hem ikili hem kaynak paket derlerken ayrıca "Generating signature" (Tr. İmza üretiliyor) imzasına denk gelmekteyiz. Bu mesajın ardından gelen sayı ise PGP ile oluşturulmuş imzayı belirtir. 
+
+
+[NOTE]
+--
+`rpmbuild` için `sign` parametresi aracılığıyla imza eklerken paket derlemek için yalnızca `-bb` ve `-ba` kullanılmalıdır. `-ba`, ikili *ve* kaynak paket inşa etme anlamına gelir.  
+--
+
+Bir paketin imzalasını doğrulamak için `rpm` komutunu `--checksig` parametresiyle birlikte kullanın. Örneğin:
+
+[source,bash]
+----
+$ rpm --checksig blather-7.9-1.i386.rpm
+blather-7.9-1.i386.rpm: size pgp md5 OK
+----
+
+[[birden-cok-paket-insa-etmek]]
+==== Birden Çok Paket İnşa Etmek
+
+Birden çok paketi inşa ederken, sürekli PGP parolarını girmekten kaçınmak için aşağıdaki sözdizimini kullanın. Mesela, `blather` ve `bother` paketlerini şu şekilde bir defa imzalayabilirsiniz: 
+
+[source,bash]
+----
+$ rpmbuild -ba --sign b*.spec
+              Enter pass phrase:
+
+Pass phrase is good.
+* Package: blather
+…
+Binary Packaging: blather-7.9-1
+…
+Generating signature: 1002
+Wrote: /usr/src/redhat/RPMS/i386/blather-7.9-1.i386.rpm
+…
+Source Packaging: blather-7.9-1
+…
+Generating signature: 1002
+Wrote: /usr/src/redhat/SRPMS/blather-7.9-1.src.rpm
+…
+* Package: bother
+…
+Binary Packaging: bother-3.5-1
+…
+Generating signature: 1002
+Wrote: /usr/src/redhat/RPMS/i386/bother-3.5-1.i386.rpm
+…
+Source Packaging: bother-3.5-1
+…
+Generating signature: 1002
+Wrote: /usr/src/redhat/SRPMS/bother-3.5-1.src.rpm
+----
+
+ifdef::community[]
+[[mock]]
+== Mock
+
+https://github.com/rpm-software-management/mock/wiki[Mock] (Tr. Taklit) paketleri inşa etmek için bir araçtır. Farklı mimariler ve farklı Fedora/RHEL sürümleri için paket inşa edebilir. Mock, yeni chrootlar oluşturur ve paketleri içinde inşa eder. Tek görevi, chrootu eksiksiz bir şekilde doldurmak ve bu chroot paket inşa inşa etmeyi denemektir. 
+
+Mock aynı şekilde birbirine bağımlı paketler zincirini inşa edebilen `mockchain` isimli bir çoklu-paketleme aracı da sunar. 
+
+Mock, kaynak yapılandırmasına göre kaynak RPMler inşa edebilir, eğer `mock-scm` paketi mevcutsa kaynak RPMleri RPMlere de dönüştürebilir, yazılımın belgelerinden -scm-enable kısmını inceleyiniz. 
+
+NOTE: https://github.com/rpm-software-management/mock/wiki[Mock]'u bir RHEL veya CentOS sistemde kullanmak istiyorsanız "Extra Packages for Enterprise Linux" (Tr. Enterprise Linux için ek paketler) https://fedoraproject.org/wiki/EPEL[EPEL] deposunu aktifleştirmeniz gerekmektedir. Bu depo https://getfedora.org/[Fedora] topluluğu tarafından sağlanmaktadır ve sistem yöneticileri, geliştiriciler ve RPM paketçileri için faydalı araçlar sunar.
+
+RPM paketçilerinin https://github.com/rpm-software-management/mock/wiki[Mock]'u kullanmalarının en yaygın sebeplerinden birisi "saf inşa ortamı" yaratabilmektir. Mock'u "saf inşa ortamı" olarak kullanırsanız sisteminizin mevcut durumu RPM paketinin hiçbir kısmını etkilenmez. Mock, sisteminizde inşa "hedef"ini belirtmek üzere çeşitli yapılandırmalar kullanır, bunları (mock paketini kurduysanız) ``/etc/mock`` dizininde bulabilirsiniz. Sadece komut satırında dağıtımı veya sürümü belirterek, o sistem için paket inşa edebilirsiniz. Unutulmaması gereken, ``mock`` ile beraber gelen yapılandırma dosyaları Fedora RPM paketçilerine yöneliktir ve RHEL, CentOS sürümlerinin versiyonları "epel" olarak isimlendirilir çünkü bu paketler bu depo için üretilmiştir. (``.cfg`` dosya uzantısını saymazsak) dilediğiniz yapılandırmayı kullanabilirsiniz. Örneğin, hazırladığımız ``celaba`` örneğini hem RHEL 7 hem de Fedora 23 için tek bir makinede şu komutlarla inşa edebilirsiniz:
+
+[source,bash]
+----
+$ mock -r epel-7-x86_64 ~/rpmbuild/SRPMS/celaba-1.0-1.el7.src.rpm
+
+$ mock -r fedora-23-x86_64 ~/rpmbuild/SRPMS/celaba-1.0-1.el7.src.rpm
+
+----
+ 
+Neden `mock` kullanmayı isteyeceğinize dair bir örnek şudur: ``BuildRequires``'da belirtmeniz gereken bir paketi (buna ``hede`` diyelim) belirtmeyi unuttunuz ve bu paket laptopunuzda kurulu. ``Hede`` sisteminizde kurulu olduğu için de paketiniz inşa edildi çünkü inşa için gerekli olan paket zaten sisteminizde kuruldu. Fakat siz bu kaynak RPM'i ``hede`` kurulu olmayan başka bir sisteme taşırsanız hatalı davranacak, bekleyen bir yan etki oluşturacaktır. https://github.com/rpm-software-management/mock/wiki[Mock] kaynak RPM'in içeriğini tarar ve ``BuildRequires``'de bahsedilen paketleri https://en.wikipedia.org/wiki/Chroot[chroot] içine kurarak bu durumu önler. Yani, eğer siz ``BuildRequires`` girdisini girmeyi unuttuysanız, derleme başarısız olacaktır çünkü ``mock`` gerekli paketin nasıl kurulacağını bilemez ve buildroot içerisinde gerekli paket bulunmayacaktır. 
+
+Tam aksi bir örneği de düşünebiliriz. Diyelim ki ``gcc``'ye bir paketi inşa etmek için ihtiyacınız var fakat sisteminizde kurulu değil. (Bir RPM paketçisinin olmazsa olmazıdır ama varsayalım ki bir şekilde oldu) https://github.com/rpm-software-management/mock/wiki[Mock] sayesinde ``gcc``yi sisteminize kurmaya gerek yoktur çünkü `mock` işleminin bir parçası olarak chroot içerisine kurulmuş olacak. 
+
+Aşağıda sistemimde bulunmayan bir bağımlılığı gerektiren bir paketin yeniden inşa etme girişimimi görmektesiniz. İşin püf noktası şudur; ``gcc`` paketi bir RPM paketçisinin sisteminde hâlihazırda kurulu olabilir ancak bazı RPM paketleri bir düzineden fazla ``BuildRequires`` gerektirir. Bu yöntem, sizin belki bir daha ihtiyaç duymacağınız nice lüzumsuz paketten kurtulmanızı sağlar.
+
+[source,bash]
+----
+$ rpmbuild --rebuild ~/rpmbuild/SRPMS/celaba-1.0-1.el7.src.rpm
+Installing /home/admiller/rpmbuild/SRPMS/celaba-1.0-1.el7.src.rpm
+error: Failed build dependencies: gcc is needed by celaba-1.0-1.el7.x86_64
+
+$ mock -r epel-7-x86_64 ~/rpmbuild/SRPMS/celaba-1.0-1.el7.src.rpm
+INFO: mock.py version 1.2.17 starting (python version = 2.7.5)...
+Start: init plugins
+INFO: selinux enabled
+Finish: init plugins
+Start: run
+INFO: Start(/home/admiller/rpmbuild/SRPMS/celaba-1.0-1.el7.src.rpm)  Config(epel-7-x86_64)
+Start: clean chroot
+Finish: clean chroot
+Start: chroot init
+INFO: calling preinit hooks
+INFO: enabled root cache
+Start: unpacking root cache
+Finish: unpacking root cache
+INFO: enabled yum cache
+Start: cleaning yum metadata
+Finish: cleaning yum metadata
+Mock Version: 1.2.17
+INFO: Mock Version: 1.2.17
+Start: yum update
+base                                                                    | 3.6 kB  00:00:00
+epel                                                                    | 4.3 kB  00:00:00
+extras                                                                  | 3.4 kB  00:00:00
+updates                                                                 | 3.4 kB  00:00:00
+No packages marked for update
+Finish: yum update
+Finish: chroot init
+Start: build phase for celaba-1.0-1.el7.src.rpm
+Start: build setup for celaba-1.0-1.el7.src.rpm
+warning: Could not canonicalize hostname: rhel7
+Building target platforms: x86_64
+Building for target x86_64
+Wrote: /builddir/build/SRPMS/celaba-1.0-1.el7.centos.src.rpm
+Getting requirements for celaba-1.0-1.el7.centos.src
+ --> Already installed : gcc-4.8.5-4.el7.x86_64
+ --> Already installed : 1:make-3.82-21.el7.x86_64
+No uninstalled build requires
+Finish: build setup for celaba-1.0-1.el7.src.rpm
+Start: rpmbuild celaba-1.0-1.el7.src.rpm
+Building target platforms: x86_64
+Building for target x86_64
+Executing(%prep): /bin/sh -e /var/tmp/rpm-tmp.v9rPOF
++ umask 022
++ cd /builddir/build/BUILD
++ cd /builddir/build/BUILD
++ rm -rf celaba-1.0
++ /usr/bin/gzip -dc /builddir/build/SOURCES/celaba-1.0.tar.gz
++ /usr/bin/tar -xf -
++ STATUS=0
++ '[' 0 -ne 0 ']'
++ cd celaba-1.0
++ /usr/bin/chmod -Rf a+rX,u+w,g-w,o-w .
+Patch #0 (celaba-output-first-patch.patch):
++ echo 'Patch #0 (celaba-output-first-patch.patch):'
++ /usr/bin/cat /builddir/build/SOURCES/celaba-output-first-patch.patch
+patching file celaba.c
++ /usr/bin/patch -p0 --fuzz=0
++ exit 0
+Executing(%build): /bin/sh -e /var/tmp/rpm-tmp.UxRVtI
++ umask 022
++ cd /builddir/build/BUILD
++ cd celaba-1.0
++ make -j2
+gcc -g -o celaba celaba.c
++ exit 0
+Executing(%install): /bin/sh -e /var/tmp/rpm-tmp.K3i2dL
++ umask 022
++ cd /builddir/build/BUILD
++ '[' /builddir/build/BUILDROOT/celaba-1.0-1.el7.centos.x86_64 '!=' / ']'
++ rm -rf /builddir/build/BUILDROOT/celaba-1.0-1.el7.centos.x86_64
+++ dirname /builddir/build/BUILDROOT/celaba-1.0-1.el7.centos.x86_64
++ mkdir -p /builddir/build/BUILDROOT
++ mkdir /builddir/build/BUILDROOT/celaba-1.0-1.el7.centos.x86_64
++ cd celaba-1.0
++ /usr/bin/make install DESTDIR=/builddir/build/BUILDROOT/celaba-1.0-1.el7.centos.x86_64
+mkdir -p /builddir/build/BUILDROOT/celaba-1.0-1.el7.centos.x86_64/usr/bin
+install -m 0755 celaba /builddir/build/BUILDROOT/celaba-1.0-1.el7.centos.x86_64/usr/bin/celaba
++ /usr/lib/rpm/find-debuginfo.sh --strict-build-id -m --run-dwz --dwz-low-mem-die-limit 10000000 --dwz-max-die-limit 110000000 /builddir/build/BUILD/celaba-1.0
+extracting debug info from /builddir/build/BUILDROOT/celaba-1.0-1.el7.centos.x86_64/usr/bin/celaba
+dwz: Too few files for multifile optimization
+/usr/lib/rpm/sepdebugcrcfix: Updated 0 CRC32s, 1 CRC32s did match.
++ /usr/lib/rpm/check-buildroot
++ /usr/lib/rpm/redhat/brp-compress
++ /usr/lib/rpm/redhat/brp-strip-static-archive /usr/bin/strip
++ /usr/lib/rpm/brp-python-bytecompile /usr/bin/python 1
++ /usr/lib/rpm/redhat/brp-python-hardlink
++ /usr/lib/rpm/redhat/brp-java-repack-jars
+Processing files: celaba-1.0-1.el7.centos.x86_64
+Executing(%license): /bin/sh -e /var/tmp/rpm-tmp.vxtAuO
++ umask 022
++ cd /builddir/build/BUILD
++ cd celaba-1.0
++ LICENSEDIR=/builddir/build/BUILDROOT/celaba-1.0-1.el7.centos.x86_64/usr/share/licenses/celaba-1.0
++ export LICENSEDIR
++ /usr/bin/mkdir -p /builddir/build/BUILDROOT/celaba-1.0-1.el7.centos.x86_64/usr/share/licenses/celaba-1.0
++ cp -pr LICENSE /builddir/build/BUILDROOT/celaba-1.0-1.el7.centos.x86_64/usr/share/licenses/celaba-1.0
++ exit 0
+Provides: celaba = 1.0-1.el7.centos celaba(x86-64) = 1.0-1.el7.centos
+Requires(rpmlib): rpmlib(CompressedFileNames) <= 3.0.4-1 rpmlib(FileDigests) <= 4.6.0-1 rpmlib(PayloadFilesHavePrefix) <= 4.0-1
+Requires: libc.so.6()(64bit) libc.so.6(GLIBC_2.2.5)(64bit) rtld(GNU_HASH)
+Processing files: celaba-debuginfo-1.0-1.el7.centos.x86_64
+Provides: celaba-debuginfo = 1.0-1.el7.centos celaba-debuginfo(x86-64) = 1.0-1.el7.centos
+Requires(rpmlib): rpmlib(FileDigests) <= 4.6.0-1 rpmlib(PayloadFilesHavePrefix) <= 4.0-1 rpmlib(CompressedFileNames) <= 3.0.4-1
+Checking for unpackaged file(s): /usr/lib/rpm/check-files /builddir/build/BUILDROOT/celaba-1.0-1.el7.centos.x86_64
+Wrote: /builddir/build/RPMS/celaba-1.0-1.el7.centos.x86_64.rpm
+warning: Could not canonicalize hostname: rhel7
+Wrote: /builddir/build/RPMS/celaba-debuginfo-1.0-1.el7.centos.x86_64.rpm
+Executing(%clean): /bin/sh -e /var/tmp/rpm-tmp.JuPOtY
++ umask 022
++ cd /builddir/build/BUILD
++ cd celaba-1.0
++ /usr/bin/rm -rf /builddir/build/BUILDROOT/celaba-1.0-1.el7.centos.x86_64
++ exit 0
+Finish: rpmbuild celaba-1.0-1.el7.src.rpm
+Finish: build phase for celaba-1.0-1.el7.src.rpm
+INFO: Done(/home/admiller/rpmbuild/SRPMS/celaba-1.0-1.el7.src.rpm) Config(epel-7-x86_64) 0 minutes 16 seconds
+INFO: Results and/or logs in: /var/lib/mock/epel-7-x86_64/result
+Finish: run
+
+----
+
+Göreceğiniz üzere, `mock` çıktısı biraz fazla "detaylı". Aynı şekilde pek çok (mock hedefinin RHEL7, CentOS7 veyahut Fedora olmasına göre) http://yum.baseurl.org/[yum] veya https://github.com/rpm-software-management/dnf[dnf] çıktısını da görmektesiniz ki daha önce mock hedefi üzerinde önceden gerekli paketleri kuran, önbelleğe taşıyan ve hazırlayan ``-init`` parametresini çalıştırsaydınız (Örn: ``mock -r epel-7-x86_64 --init``) bu çıktılarla karşılaşmayacaktınız. 
+
+Daha fazla için https://github.com/rpm-software-management/mock/wiki[Mock] hakkındaki güncel belgeleri inceleyebilirsiniz. 
+endif::community[]
+
+ifdef::community[]
+[[versiyon-kontrol-sistemleri]]
+== Versiyon Kontrol Sistemleri
+Çeviri Notu: Bu bölüm çevirirken en çok zorlandığım bölüm. Eğer cümlelerin anlamsız göründüğünü düşünür, esas anlamını karşılamadığını düşünürseniz muhakkak haber verin.
+
+RPMlerle çalışırken, çoğu zaman paketlediğimiz yazılımın içeriğini yönetebilmek için https://git-scm.com/[git] gibi bir https://en.wikipedia.org/wiki/Version_control[Versiyon Kontrol Sisteminden] (İngilizce: Version Control System, VCS olarak kısaltılır ve çeviride bu kısaltma kullanılacaktır) yararlanmayı dileyebilirsiniz. Dikkat edilmesi gereken bir husus, bir VCS'i ikili dosyaları depolamak için kullanmak pek tercih edilen bir yöntem değildir. Çünkü bu araçlar dosyaların değişikliklerini ölçmek içindir (çoğunlukla metin dosyaları için optimize edilmiştir) ve ikili dosyalar bu özelliği sunamazlar. Üstelik, ikili dosyalar kaynak deposunun büyüklüğünü hızla şişirirler. 
+
+Bu soruna karşı Açık kaynak projelerinin çözümleri şunlardır: ya SPEC dosyası VCS'teki kaynak kodunun içerisinde depolanır ya da VCS'e sadece SPEC dosyası ve yamalarla beraber kaynak kodlarının sıkıştırılmış arşivi yüklenir ki bu arşive "gözardı edilen önbellek" (look aside cache) denir. 
+
+Bu kısımda RPM paketlerine dönüştürecek içerikleri yönetmek için VCS (https://git-scm.com/[git]) kullanmanın iki yolundan bahsedeceğiz: https://github.com/dgoodwin/tito[tito] ve https://github.com/release-engineering/dist-git[dist-git].
+
+NOTE: Bu kısımdakileri takip edebilmek için sisteminize ``git`` isimli paketi kurmalısınız. 
+
+[[tito]]
+=== tito
+
+Tito, paketlenecek yazılımın bütün kaynak kodunun https://git-scm.com/[git] deposu içerisinde olduğunu varsayarak kullanılan bir araçtır. Tito, yazılım geliştiren bir ekibin normal https://git-scm.com/book/en/v2/Git-Branching-Branching-Workflows[Dallanma Akışını] sürdürmesine izin verdiği için DevOps çalışanları için uygun bir tercihtir. 
+
+Tito yazılımın kademe kademe paketlenmesine izin verir. Paket süreçlerle otomatik olarak inşa edilir ve http://rpm.org/[RPM] tabanlı sistemler için olağan kurulum deneyimini sağlar. 
+
+NOTE: https://github.com/dgoodwin/tito[Tito] paketi https://getfedora.org/[Fedora] ve RHEL 7 ile CentOS 7 üzerine kullanılabilen https://fedoraproject.org/wiki/EPEL[EPEL] deposu için mevcuttur. 
+
+Tito, https://git-scm.com/book/en/v2/Git-Basics-Tagging[git etiketleri] aracılığıyla çalışır ve izin verirseniz sizin için yönetir. Bunun yanında isteğe bağlı olarak tercih ettiğiniz etiketleme şeması altında çalışması için de yapılandırılabilir. 
+
+Şimdi Tito hakkında bir keşfe çıkalım ve Tito'yu kullanan bir projeye göz atalım. Bu proje, gelecek kısımların birisinin konusu olacak olan https://github.com/release-engineering/dist-git[dist-git]'dir. Hazır bu proje https://github.com/[GitHub]'da yayınlamışken onu klonlayabiliriz.
+
+[source,bash]
+----
+$ git clone https://github.com/release-engineering/dist-git.git
+Cloning into 'dist-git'...
+remote: Counting objects: 425, done.
+remote: Total 425 (delta 0), reused 0 (delta 0), pack-reused 425
+Receiving objects: 100% (425/425), 268.76 KiB | 0 bytes/s, done.
+Resolving deltas: 100% (184/184), done.
+Checking connectivity... done.
+
+$ cd dist-git/
+
+$ ls *.spec
+dist-git.spec
+
+$ tree rel-eng/
+rel-eng/
+├── packages
+│   └── dist-git
+└── tito.props
+
+1 directory, 2 files
+
+----
+
+Görebileceğiniz üzere, SPEC dosyası git deposunun kök dizininde ve ``rel-eng`` dizini de Tito'nun veri sayımları, yapılandırması ve özel Tito modülleri gibi çeşitli detayları barındırır. 
+
+Aynı şekilde, `rel-eng` dizininde görüleceği gibi ``packages`` (Tr. paketler) isimli bir alt dizin vardır. Bu da her paket için bir dosya depolar ki tek bir git deposunda Tito bu işi halleder. Tek bir git deposunda bir çok RPM olabilir ve Tito bunu kolaylıkla halleder.
+
+Ancak bu örneğinizde paketler listesinde yalnızca bir tek paketi görmekteyiz. Ayrıca dikkat edilmelidir ki bu paketin ismi de SPEC dosyasının adıyla örtüşmektedir. https://github.com/release-engineering/dist-git[dist-git] geliştiricilerinin git depolarını Tito ile yönetmeleri için tek gereken şey ``tito init`` komutunu kullanmalarıdır. 
+
+Eğer tam bir DevOpscu gibi davranmak istersek https://en.wikipedia.org/wiki/Continuous_integration[Sürekli Entegrasyon (Continuous Integration - CI olarak kısaltılır)] ve https://en.wikipedia.org/wiki/Continuous_delivery[Sürekli Teslimat (Continuous Delivery - CD olarak kısaltılır)] sürecinin bir parçası olarak kullanmayı isteyebiliriz. 
+
+Bu örnekte yapacağımız şey Tito için bir "deneme inşası" gerçekleştirmek ki bunun için ``Mock``'u dahi kullanabiliriz. Çıktıyı iş hattının (pipeline) diğer parçaları için bir kurulum noktası olarak da kullanabiliriz. Aşağıda bunu gerçekleştiren basit bir komut örneği verilmiştir ve çeşitli ortamlara uyarlanabilir. 
+
+[source,bash]
+----
+$ tito build --test --srpm
+Building package [dist-git-0.13-1]
+Wrote: /tmp/tito/dist-git-git-0.efa5ab8.tar.gz
+
+Wrote: /tmp/tito/dist-git-0.13-1.git.0.efa5ab8.fc23.src.rpm
+
+$ tito build --builder=mock --arg mock=epel-7-x86_64 --test --rpm
+Building package [dist-git-0.13-1]
+Creating rpms for dist-git-git-0.efa5ab8 in mock: epel-7-x86_64
+Wrote: /tmp/tito/dist-git-git-0.efa5ab8.tar.gz
+
+Wrote: /tmp/tito/dist-git-0.13-1.git.0.efa5ab8.fc23.src.rpm
+
+Using srpm: /tmp/tito/dist-git-0.13-1.git.0.efa5ab8.fc23.src.rpm
+Initializing mock...
+Installing deps in mock...
+Building RPMs in mock...
+Wrote:
+  /tmp/tito/dist-git-selinux-0.13-1.git.0.efa5ab8.el7.centos.noarch.rpm
+  /tmp/tito/dist-git-0.13-1.git.0.efa5ab8.el7.centos.noarch.rpm
+
+$ sudo yum localinstall /tmp/tito/dist-git-*.noarch.rpm
+Loaded plugins: product-id, search-disabled-repos, subscription-manager
+Examining /tmp/tito/dist-git-0.13-1.git.0.efa5ab8.el7.centos.noarch.rpm: dist-git-0.13-1.git.0.efa5ab8.el7.centos.noarch
+Marking /tmp/tito/dist-git-0.13-1.git.0.efa5ab8.el7.centos.noarch.rpm to be installed
+Examining /tmp/tito/dist-git-selinux-0.13-1.git.0.efa5ab8.el7.centos.noarch.rpm: dist-git-selinux-0.13-1.git.0.efa5ab8.el7.centos.noarch
+Marking /tmp/tito/dist-git-selinux-0.13-1.git.0.efa5ab8.el7.centos.noarch.rpm to be installed
+Resolving Dependencies
+--> Running transaction check
+---> Package dist-git.noarch 0:0.13-1.git.0.efa5ab8.el7.centos will be installed
+
+----
+
+Dikkat edilmelidir ki, son komutun sudo veyahut root yetkileriyle çalıştırılması gereklidir ve fazla uzamaması için çıktısı kırpılmıştır zira bağımlılıklar listesi oldukça uzun sayılabilir. 
+
+Bu kısa örneğimizde Tito kullanımından kısaca bahsettik, ancak geleneksel Sistem Yöneticileri, RPM paketçileri ve DevOpsçular için ne kadar faydalı özellikleri olduğunu göstermeye çalıştık. _Tito_'nun GitHub sitesinde bulunan belgelere göz atmanızı şiddetle tavsiye ederiz. Burada, bir projeye başlamak için ferekenlerden çeşitli ileri düzey konulara kadar pek çok şey bulabilirsiniz. 
+
+[[dist-git]]
+=== dist-git
+
+https://github.com/release-engineering/dist-git[dist-git] aracı https://github.com/dgoodwin/tito[Tito'ya] göre daha farklı bir yaklaşımı ele alır. Salt kaynak kodunu https://git-scm.com/[git]te tutmak yerine "gözardı edilen önbellek" olarak da anılan kaynak kodunu sıkıştırılmış bir arşivde spec dosyası ve yamalarıyla birlikte saklar. 
+
+Görmezden gelinen bellek (ya da look-aside-cache), RPM İnşa Sistemlerinin büyük boyutlu dosyaları nasıl idare ettiğini belirten bir terimdir. https://koji.fedoraproject.org/koji/[Koji] gibi RPM İnşa Sistemlerde sıklıkla kullanılan bir yaklaşımı ifade eder. İnşa sistemi, SPEC dosyasında belirtilen  ``SourceX`` girdilerindeki verileri "çeker" (bkz: pull). Arşiv dosyası güncellenirken, versiyon kontrol sistemindeki SPEC dosyası ve yamaları sabit kalır. Aynı şekilde, bu yöntem için yardımcı olan bir komut satırı aracı da bulunmaktadır. 
+
+Başka bir belgelendirmeyi buraya kopyalamak yerine belgenin aslına yönlendirmeyi tercih ediyoruz. Bunun gibi bir sistemin nasıl kurulacağını öğrenmek istiyorsanız, https://github.com/release-engineering/dist-git[dist-git] belgelerini inceleyebilirsiniz. 
+endif::community[]
+
+[[makrolar-hakkinda-daha-fazlasi]]
+== Makrolar Hakkında Daha Fazlası
+
+Gömülü pek çok RPM Makrosu vardır ve bunlardan birkaçını bu kısımda ele alacağız. Ancak dilenirse http://rpm.org/user_doc/macros.html[RPM Resmi Belgesinde] kapsamlı bir listesiye ulaşabilirsiniz. 
+
+ifdef::community[]
+
+Sizin https://tr.wikipedia.org/wiki/Linux[Linux] dağıtımınızın da kendisine özgü bazı makroları da bulunmaktadır. Bu belgede https://getfedora.org/[Fedora], https://www.centos.org/[CentOS] ve https://www.redhat.com/en/technologies/linux-platforms[RHEL] tarafından sağlanan pek çok makroyu göstereceğiz. Aynı zamanda makrolarla sisteminizi nasıl inceleyeceğinizi de bu bölümde alacağız. Ancak, diğer RPM tabanlı Linux dağıtımlarına özgü makroları tanıt**ma**yacağız. 
+endif::community[]
+
+ifdef::rhel[]
+Red Hat Enterprise Linux tarafından sunulan pek çok makro bulunmaktadır ve bazılarını bu bölümde inceleyeceğiz. Aynı şekilde diğer makrolarla sisteminizi nasıl inceleyeceğinizi ele alacağız. 
+endif::rhel[]
+
+[[kendinizinkini-tanimlayin]]
+=== Kendi Makronuzu Tanımlayın
+
+Kendi makronuzu tanımlayabilirsiniz. http://rpm.org/user_doc/macros.html[RPM Resmi Belgesinden] yapılan makroların yeteneklerini gösteren detaylı bir alıntıyı aşağıda görebilirsiniz.
+
+Bir makro tanımlamak için:
+
+[source,specfile]
+----
+%global <name>[(opts)] <body>
+----
+
+`\` işaretinin ardından gelen boşluklar kaldırılacaktır. İsim, en üç harften oluşmalı ve yalnızca sayılardan, isimlerden ve `_` işaretinden oluşmalıdır. `(opts)` kısmı olmayan bir makro, yalnızca özyinelemeli makro genişletmesi yapabileceğinden "sade" bir makrodur. Parametre verilebilen bir makro `(opts)` kısmını barındırır. (Parantezlerle beraber bir metin olan) `(opts)` makro çağırmanın başlangıcındaki getopt(3) için argv/argc* işlemi gibidir. 
+
+*Argc, Argument Count'un kısaltmasıdır ve argüman sayısı anlamına gelir. Argv Argument Vector'ün kısaltmasıdır ve argümanın içeriğini gösterir. 
+
+[NOTE]
+--
+Eski RPM SPEC dosyaları `%define <name> <body>` makro örüntüsünü kullanabilir. `%define` ve `%global` atasındaki farklar şöyledir:
+
+* `%define` daha yerel bir kapsam içindir. Yani, SPEC dosyasının belirli bir kısmına yöneliktir. Bunun yanısıra, `%define` kısmı tembelce değerlendirilir, ancak kullanıldığında genişletilir. 
+* `%global` ise SPEC dosyasının tamamını içine alan bir kapsam içindir. Derlenir derlenmez genişletilir. 
+--
+
+Örnekler:
+
+----
+%global githash 0ec4e58
+%global python_sitelib %(%{__python} -c "from distutils.sysconfig import get_python_lib; print(get_python_lib())")
+----
+
+NOTE: Yorum içinde dahi olsa, makrolar muhakkak ki genişletilir. Kimi zaman bu zararsızdır, ancak ikinci örnekte göreceğiniz gibi için bir Python komutunu çalıştırmış bulunmaktayız. Bu komut siz yoruma alsanız da, %changelog içinde bahsetseniz de çalışacaktır. Bir makroyu yoruma almak için, `%%` kullanın. Mesela ki: `%%global`.
+
+[[setup]]
+=== %setup
+
+``%setup`` makrosu tarball hâlindeki kaynak kodlarından paketleri inşa etmek için kullanılır. ``%setup`` makrosunun öntanımlı hareket tarzı ``rpmbuild`` çıktısında göreceğiniz gibidir. Her bir makro safhasının başlangıcında ``Executing(%falancafilanca)`` çıktısını verir. Mesela:
+
+[source,bash]
+----
+Executing(%prep): /bin/sh -e /var/tmp/rpm-tmp.DhddsG
+----
+
+`set -x` aktifleştirilmiş bir kabuk çıktısı buna benzer. ``/var/tmp/rpm-tmp.DhddsG`` çıktısını merak ediyorsanız ``-debug`` kullanın çünkü ``Rpmbuild`` başarılı bir inşadan sonra geçici çıktıları siler. Aşağıdaki örnekte ortam değişkenlerinin yapılandırmasını görebilirsiniz: 
+
+[source,bash]
+----
+cd '/builddir/build/BUILD'
+rm -rf 'celaba-1.0'
+/usr/bin/gzip -dc '/builddir/build/SOURCES/celaba-1.0.tar.gz' | /usr/bin/tar -xof -
+STATUS=$?
+if [ $STATUS -ne 0 ]; then
+  exit $STATUS
+fi
+cd 'celaba-1.0'
+/usr/bin/chmod -Rf a+rX,u+w,g-w,o-w .
+----
+
+``%setup`` doğru dizinde çalıştığımıza emin olur, daha önceki inşalardan kalan kalıntıları siler, tarball kaynağını açar ve çeşitli yetkiler tanımlar. ``%setup`` makrosunun davranışını belirleyen çeşitli parametreler vardır.
+
+[[setup-q]]
+==== %setup -q
+
+``-q`` parametresi ``%setup`` makrosunun çıktısını azaltır. ``tar -xvvof`` yerine ``tar -xof`` kullanılır. Bu parametre, ilk seferde kullanılmalıdır.
+
+Option ``-q`` limits verbosity of ``%setup`` macro. Only ``tar -xof`` is
+executed instead of ``tar -xvvof``. This option has to be used as first.
+
+[[setup-n]]
+==== %setup -n
+
+Bazı durumlarda, tarballdan gelen dizinin ismi ``%{name}-%{version}`` ikilisinden farklıdır. Bu, ``%setup`` makrosunun işleyişini sekteye uğratır. Dizin adı ``-n dizin_adi`` parametresiyle belirtilmelidir. 
+
+Örneğin, paketin adı ``celaba``'dır ama kaynak kodunun arşivi ``hello-1.0.tgz`` ismindedir ve içeriğinde ``hello/`` dizinin barındırır. O zaman SPEC dosyasının içeriği şu şekilde olmalıdır:
+
+[source,specfile]
+----
+Name: celaba
+Source0: https://example.com/%{name}/release/hello-%{version}.tar.gz
+…
+%prep
+%setup -n hello
+----
+
+[[setup-c]]
+==== %setup -c
+
+``-c`` parametresi kaynak kodunun arşivi açıldıktan sonra herhangi bir alt dizin içermiyorsa kullanılmalıdır. Arşivden gelecek dosyalar bütün dizini dolduracaktır ve ``-c`` parametresi bir dizin açıp arşivi içine genişletir. Bu makronun ne yaptığını tasvir eden bir örnek:
+
+[source,bash]
+----
+/usr/bin/mkdir -p celaba-1.0
+cd 'celaba-1.0'
+----
+
+Dizin, arşiv genişletildikten sonra değişmeyecektir. 
+
+[[setup-dt]]
+==== %setup -D ve -T
+
+``-D`` parametresi kaynak kodu dizinin silinmesini engeller. Tekrar tekrar ``%setup`` makrosunun kullanıldığı durumlar için faydalıdır. Aslında, ``-D`` parametresinin yap**ma**dığı iş şudur:
+
+[source,bash]
+----
+rm -rf 'celaba-1.0'
+----
+
+``-T`` parametresi ise tarball'ın gelişletilmesine engel olur. Yani şu satırlar çalış**ma**yacaktır:
+
+[source,bash]
+----
+/usr/bin/gzip -dc '/builddir/build/SOURCES/celaba-1.0.tar.gz' | /usr/bin/tar -xvvof -
+----
+
+[[setup-ab]]
+==== %setup -a ve -b
+
+``-a`` ve ``-b`` belirli kaynakları genişletir. 
+
+* ``-b`` (İngilizce "Önce" demek olan "B"efore kelimesinden gelir) belirlenmiş kaynağı çalışma dizinine girmeden önce genişletir. 
+* ``-a`` (İngilizce "Sonra" demek olan "A"fter kelimesinden gelir) belirlenmiş kaynağı çalışma dizinne girdikten sonra genişletir. 
+
+Argümanlarındaki kaynak numaraları SPEC dosyasındaki ``SourceX`` girdilerinden gelir.
+
+Örneğin ``celaba-1.0.tar.gz`` içerisinde boş bir ``örnekler`` dizini var ve bu dizinin içeriği ``örnekler.tar.gz`` isimli başka bir arşivin içinde. O zaman, ``Source1``'i çalışma dizinine girdikten sonra genişletmek için  ``-a 1`` parametresini kullanmalıyız. 
+
+[source,specfile]
+----
+Source0: https://example.com/%{name}/release/%{name}-%{version}.tar.gz
+Source1: örnekler.tar.gz
+…
+%prep
+%setup -a 1
+----
+
+Fakat elimizde ``celaba-1.0/örnekler`` dizinine dosyaları çıkaran ``celaba-1.0-örnekler.tar.gz`` isimli bir arşiv varsa, ``-b 1`` parametresini kullanmalıyız. Çünkü çalışma dizinine girmeden önce ``Source1`` genişletilmelidir. 
+
+[source,specfile]
+----
+Source0: https://example.com/%{name}/release/%{name}-%{version}.tar.gz
+Source1: %{name}-%{version}-örnekler.tar.gz
+…
+%prep
+%setup -b 1
+----
+
+Aynı zamanda, üstteki parametreleri bir arada kullanabilirsiniz. 
+
+[[files]]
+=== %files
+
+``%files`` yönergesinde kullanılan yaygın makrolar şu şekildedir: 
+
+[cols="20%,80%"]
+|====
+| Makro              | Açıklama
+| %license           | LICENCE dosyasını belirtir, sisteme uygun şekilde yükler ve RPM tarafından tanımlanır. Örnek kullanım: ``%licence LICENCE``
+| %doc               | Sisteme kurulmuş olan ve RPM tanımlanmış belgeleri işaretler. Çoğu zaman yalnızca yazılıma yönelik belgelendirmeyi içermez, belgelendirmeyi tamamlayan aynı zamanda örnek kullanımları ve farklı türden parçaları da içerir. Sözkonusu olan durumda kod örnekleri de dahildir. Dosyadan çalıştırılabilir kod çıkarılırken dikkatli olunmalıdır. Örnek kullanım: ``%doc README``
+| %dir               | Bu RPM paketi tarafından sahiplenilen konumu belirtilir. Paketin kaldırılması gerektiği zaman hangi dizinler ive dosyaların kaldırıldığını bilinmesi açısından oldukça önemlidir. Örnek kullanım: ``%dir %{_libdir}/%{name}``
+| %config(noreplace) | Belirtilen dosyanın bir yapılandırma dosyası olduğunu belirtir. Eğer belirtilen dosyasının sağlama değeri (checksum) orijinal dosyadan ayrıysa RPM bu dosyaları koruyacaktır. Eğer bir değişim gerekecekse, sonu ``.rpmnew`` ile biten bir dosya oluşturulur ve son kullanıcının sisteminde daha önceden bulunan/değiştirilmiş dosya değiştirilmez. Örnek kullanım: ``%config(noreplace) %{_sysconfdir}/%{name}/%{name}.conf``
+|====
+
+[[gomulu-makrolar]]
+=== Gömülü Makrolar
+
+Sisteminizde pek gömülü makro bulunmaktadır ve bu makroların hepsini görmenin en kolay ``rpm --showrc`` komutunu çalıştırmaktır. Ancak ki çıktı fazlaca uzun olduğu için `grep` komutuyla kısaltmak, genellikle tercih edilen bir yöntemdir. 
+
+Aynı şekilde, ``rpm -ql rpm`` komutunun çıktısında, içinde ``macros`` dosyalardan da daha fazla bilgi alabilirsiniz. Bu dosyalar, sisteminizdeki RPM sürümüyle birlikte gelir. 
+
+[[rpm-dagitim-makrolari]]
+=== RPM Dağıtım Makroları
+
+Different distributions will supply different sets of recommended RPM Macros
+based on the language implementation of the software being packaged or the
+specific guidelines of the distribution in question.
+
+ifdef::community[]
+Bu makrolar, RPM Paketleri tarafından sunulur ve http://yum.baseurl.org/[yum] veyahut https://github.com/rpm-software-management/dnf[dnf] gibi dağıtımlara ait paket yöneticileri aracılığıyla kurulabilirler. Makro dosyaları kurulduktan sonra ``/usr/lib/rpm/macros.d/`` içerisinde bulunabilir ve ``rpm --showrc`` çıktısında görülebilir. 
+endif::community[]
+
+ifdef::rhel[]
+Bu makrolar, RPM Paketleri tarafından sunulur ve http://yum.baseurl.org/[yum] gibi dağıtımlara ait paket yöneticileri aracılığıyla kurulabilirler. Makro dosyaları kurulduktan sonra ``/usr/lib/rpm/macros.d/`` içerisinde bulunabilir ve ``rpm --showrc`` çıktısında görülebilir. 
+endif::rhel[]
+
+Bunun başlıca örneklerinden birisi, https://docs.fedoraproject.org/en-US/packaging-guidelines/[Fedora Paketleme Kılavuzunda] ilişkili olan https://docs.fedoraproject.org/en-US/packaging-guidelines/#_domain_specific_guidelines[Uygulamaya Özgü Kılavuzlar] bölümüdür. Bu rehberin yazıldığı tarihte, RPM Makrolarıyla birlikte 60'ın üzerinde farklı RPM paketleme kılavuzu bulunmaktadır. 
+
+ifdef::community[]
+Bunlara bir örnek, https://www.python.org/[Python]'un 2. versiyonu için hazırlanmış olan ``python2-rpm-macros`` paketidir. (RHEL 7 ve CentOS 7 için EPEL deposunda bulunmaktadır.) Python2'ye özgü pek çok makroya bu paketten ulaşabilirsiniz.  
+endif::community[]
+
+ifdef::rhel[]
+Bunlara bir örnek, https://www.python.org/[Python]'un 2. versiyonu için hazırlanmış olan ``python2-rpm-macros`` paketidir. (RHEL 7 için EPEL deposunda bulunmaktadır.) Python2'ye özgü pek çok makroya bu paketten ulaşabilirsiniz.  
+endif::rhel[]
+
+[source,bash]
+----
+$ rpm -ql python2-rpm-macros
+/usr/lib/rpm/macros.d/macros.python2
+
+$ rpm --showrc | grep python2
+-14: __python2  /usr/bin/python2
+CFLAGS="%{optflags}" %{__python2} %{py_setup} %{?py_setup_args} build --executable="%{__python2} %{py2_shbang_opts}" %{?1}
+CFLAGS="%{optflags}" %{__python2} %{py_setup} %{?py_setup_args} install -O1 --skip-build --root %{buildroot} %{?1}
+-14: python2_sitearch   %(%{__python2} -c "from distutils.sysconfig import get_python_lib; print(get_python_lib(1))")
+-14: python2_sitelib    %(%{__python2} -c "from distutils.sysconfig import get_python_lib; print(get_python_lib())")
+-14: python2_version    %(%{__python2} -c "import sys; sys.stdout.write('{0.major}.{0.minor}'.format(sys.version_info))")
+-14: python2_version_nodots     %(%{__python2} -c "import sys; sys.stdout.write('{0.major}{0.minor}'.format(sys.version_info))")
+
+----
+
+Üstteki örnekte ham RPM makro tanımlarını görmektesiniz. Eğer dilenirse ``rpm --eval`` komutunu kullanarak bu makroları daha anlaşılır bir biçimde tekrardan yorumlatabilirsiniz. Bu sayede RPM paketlerken hangi makronun ne işe yaracağını inceleyebilirsiniz. 
+
+[source,bash]
+----
+$ rpm --eval %{__python2}
+/usr/bin/python2
+
+$ rpm --eval %{python2_sitearch}
+/usr/lib64/python2.7/site-packages
+
+$ rpm --eval %{python2_sitelib}
+/usr/lib/python2.7/site-packages
+
+$ rpm --eval %{python2_version}
+2.7
+
+$ rpm --eval %{python2_version_nodots}
+27
+
+----
+
+[[ozel-makrolar]]
+== Özel Makrolar
+
+``~/.rpmmacros`` dosyasını düzenleyerek dağıtım makrolarını geçersiz bırakabilirsiniz. Burada yapacağınız her bir değişiklik gelecekteki inşa süreçlerine etkide bulunacaktır. 
+
+Değiştirebileceğiniz bazı makrolar şu şekildedir: 
+
+``%_topdir /opt/falanca/calisma/dizini/rpmbuild``:: Bu dizini oluşturup oluşturabilir ve ``rpmdev-setuptree`` aracının oluşturduğu dizinleri ekleyebilirsiniz. Bu makronun değeri öntanımlı olarak ``~/rpmbuild``'dir.
+
+``%_smp_mflags -l3``:: Bu makro genellikle Makefile'a geçmek için kullanılırdı. Mesela: ``make %{?_smp_mflags}`` veya inşa sürecinde eşzamanlı işlikçilerin sayısını belirlemek. Öntanımlı olarak, ``-jX``'i temsil eder ki ``X`` burada işlikçi sayısını belirtir. Bu numarayı değiştirerek paketlerin inşa sürecini hızlandırabilir ya da yavaşlatabilirsiniz. 
+
+``~/rpmmacros`` içerisinde yeni makrolar belirleyebilirsiniz, ancak bunu yapmayın. Çünkü bu makrolar yalnızca sizin makinenizde tanımlanmış olacak. Diğer kullanıcılar paketleri tekrar inşa etmek istediği zaman bu makrolara erişemeyebilirler.
+
+[[epoch-betikciler-ve-tetikciler]]
+== Epoch, Scriptlets, and Triggers
+
+
+RPM SPEC dosyaları âlemindeki bazı konular daha ileri seviye sayılır çünkü bu konular yalnızca SPEC dosyasını değil, paketin nasıl derlendiğini ve aynı zamanda bu RPM paketi kurulacağı zaman nasıl tepki göstermesi gerektiğini de ilgilendirir. 
+
+Bu bölümde bu ileri düzey konulardan en bilinenleri olan dönemleri, betikçileri ve tetikleyicileri ele alacağız. 
+
+[[donem]]
+=== Dönem
+
+İlk olarak ``Dönem (Epoch)``'i ele alacağız. dönemler belirli bir versiyon numarasına yönelik bağımlılıkları tanımlar. Eğer ``Epoch`` yönergesi SPEC dosyasında belirtilmemişse öntanımlı değer 0'dır. Bu rehberin SPEC yazımıyla ilgili kısmında dönemleri ele almadık, çünkü versiyon kıyaslamak normalde RPM'in yaptığı bir iş olduğu için bunu belirtmek ayrıca kafa karıştırıcı olabilir. 
+
+``Epoch: 1`` ve ``Version: 1.0`` yönergelerine sahip ``hedehödö`` diye bir paketin sisteme kurulduğunu farzedelim. Ve başka birisi de ``hedehödö``'yü ``Version: 2.0`` yönergesiyle paketledi ancak dalgınlıkla ``Epoch`` yönergesini belirtmeyi unuttu. Yeni versiyon, RPM tarafından bir güncelleme olarak kabul edilmeyecektir çünkü RPM paketlerinin versiyonlarını belirtirken dönem (epoch) geleneksel İsim-Versiyon-Sürüm üçlemesinden daha öncelikli kabul edilir. 
+
+Bu yaklaşım ancak çok ama çok gerekli olduğu zaman son çare olarak kullanılır. Amaç, sürüm numaralandırmalarındaki değişikliklerden doğan yan etkileri telafi etmektir. Bir başka sebebi ise sürüm numalarında kullanılan kıyaslanması mümkün olmayan karakterleri telafi etmektir. 
+
+[[tetikleyiciler-ve-betikciler]]
+=== Betikçiler ve Tetikleyiciler
+
+Paketin kurulması esnasında sistem üzerinde gereken veyahut istenen değişikliği gerçekleştirmek için kullanılan birtakım yönergeler vardır. Bu yönergeler **betikçiler** (İng: Scriptlet) olarak adlandırılır. 
+
+Neden böyle bir şeyi kullanmak isteyeceğinize dair bir örnek verelim. Diyelim ki sisteme yeni bir hizmet yerleştiren bir paket kurduk ve içeriğinde https://freedesktop.org/wiki/Software/systemd/[systemd]'ye ait bir https://www.freedesktop.org/software/systemd/man/systemd.unit.html[birim dosyası] bulunmakta. Bu durumda https://freedesktop.org/wiki/Software/systemd/[systemd]'ye ``filanca`` isimli hayali paketin kurulumundan sonra ``systemctl start filanca.service`` komutunun kullanılabileceğini bildirmemiz gerek. Aynı şekilde, kaldıracağımız zaman da tam aksini gerçekleştirebilmemiz gerekir, böylece birim dosyası Systemd'nin yapılandırmasına kendisini sürdürmeye devam ederken sözkonusu arkaplan programının kaldırılması başka hataları tetiklemez. 
+
+Sıklıkla kullanılan betikçilerin sayısı oldukça azdır ve kullanım şekilleri ``%build`` ile ``%install`` gibi "gövde başlık" yönergeleriyle oldukça benzeşirler. (Mesela birden çok satıra yayılabilirler.) Çoğu zaman bir 
+ifdef::community[https://tr.wikipedia.org/wiki/POSIX[POSIX]]
+ifdef::rhel[POSIX] 
+uyumlu bir kabuk betiği ile yazılırlar ancak hedef dağıtımın izin verdiği programlama dillerinde de hazırlanabilirler. Hangi dillerle yazılabileceğinin kapsamlı bir listesini _RPM Resmi Belgesisinde_ bulabilirsiniz. 
+
+Betikçi yönergeleri şunlardır:
+
+[cols="20%,80%"]
+|====
+| Yönerge     | Açıklama
+| ``%pre``    | Paket hedef sisteme kurulmadan hemen önce çalıştırılacak betikçi
+| ``%post``   | Paket hedef sisteme kurulduktan hemen sonra çalıştırılacak betikçi
+| ``%preun``  | Paket hedef sistemden kaldırılmadan hemen önce çalıştırılacak betikçi
+| ``%postun`` | Paket hedef sistemden kaldırıldıktan hemen sonra çalıştırılacak betikçi
+|====
+
+Aynı zamanda bu işlev için sıklıkla kullanılan RPM makroları da vardır. Mesela daha önce bahsettiğimiz https://freedesktop.org/wiki/Software/systemd/[systemd]'nin yeni bir https://www.freedesktop.org/software/systemd/man/systemd.unit.html[birim dosyası] için tetiklenmesi gerektiğini belirtmenin daha kolay yolları da vardır. Alttaki çıktıdan inceleyebilirsiniz. Daha fazla bilgi için https://fedoraproject.org/wiki/Packaging:Systemd[Fedora Systemd Paketleme Kılavuzu]na göz atın.
+
+[source,bash]
+----
+$ rpm --showrc | grep systemd
+-14: __transaction_systemd_inhibit      %{__plugindir}/systemd_inhibit.so
+-14: _journalcatalogdir /usr/lib/systemd/catalog
+-14: _presetdir /usr/lib/systemd/system-preset
+-14: _unitdir   /usr/lib/systemd/system
+-14: _userunitdir       /usr/lib/systemd/user
+/usr/lib/systemd/systemd-binfmt %{?*} >/dev/null 2>&1 || :
+/usr/lib/systemd/systemd-sysctl %{?*} >/dev/null 2>&1 || :
+-14: systemd_post
+-14: systemd_postun
+-14: systemd_postun_with_restart
+-14: systemd_preun
+-14: systemd_requires
+Requires(post): systemd
+Requires(preun): systemd
+Requires(postun): systemd
+-14: systemd_user_post  %systemd_post --user --global %{?*}
+-14: systemd_user_postun        %{nil}
+-14: systemd_user_postun_with_restart   %{nil}
+-14: systemd_user_preun
+systemd-sysusers %{?*} >/dev/null 2>&1 || :
+echo %{?*} | systemd-sysusers - >/dev/null 2>&1 || :
+systemd-tmpfiles --create %{?*} >/dev/null 2>&1 || :
+
+$ rpm --eval %{systemd_post}
+
+if [ $1 -eq 1 ] ; then
+        # Initial installation
+        systemctl preset  >/dev/null 2>&1 || :
+fi
+
+$ rpm --eval %{systemd_postun}
+
+systemctl daemon-reload >/dev/null 2>&1 || :
+
+$ rpm --eval %{systemd_preun}
+
+if [ $1 -eq 0 ] ; then
+        # Package removal, not upgrade
+        systemctl --no-reload disable  > /dev/null 2>&1 || :
+        systemctl stop  > /dev/null 2>&1 || :
+fi
+
+----
+
+RPM işlemi üzerinde daha da incelikli bir kontrol arzuluyorsanız **tetikleyicilere** (İng. triggers) göz atabilirsiniz. Hemen hemen betikçilerle aynı işlevi görürler, ancak kurulum veya yükseltme işlemi içerisinde özel bir sıralamaya göre çalıştırılırlar, işlem üzerinde çok daha hassa bir kontrol sağlarlar. 
+
+Tetikçiler, tetiklenme sıralarına göre detaylarıyla birlikte aşağıda listelenmişlerdir:
+
+[source,specfile]
+----
+all-%pretrans
+...
+any-%triggerprein (%triggerprein - öteki paketler yeni bir kuruluma hazırlanırken)
+new-%triggerprein
+new-%pre      Paketin yeni versiyonu kurulurken
+...           (bütün yeni dosyalar kurulur)
+new-%post     Paketin yeni versiyou kurulurken 
+
+any-%triggerin (%triggerin - öteki paketler yeni bir kuruluma hazırlanırken)
+new-%triggerin
+old-%triggerun
+any-%triggerun (%triggerun - öteki paketler kaldıırlmaya hazırlanırken)
+
+old-%preun    Paketin eski versiyonu kaldırılırken 
+...           (bütün eski dosyalar kaldırılır)
+old-%postun   Paketin eski versiyonu kaldırılırken
+
+old-%triggerpostun
+any-%triggerpostun (%triggerpostun - diğer paketler de kaldırılırken)
+...
+all-%posttrans
+
+----
+
+ifdef::community[]
+Yukarıdaki maddeler Fedora sistemlerde ``/usr/share/doc/rpm/triggers``, RHEL 7 ve CentOS 7 sistemlerde ise ``/usr/share/doc/rpm-4.*/triggers`` adresinde bulunan RPM belgelerinden alıntıdır. 
+endif::community[]
+
+ifdef::rhel[]
+Yukarıdaki maddeler ``/usr/share/doc/rpm-4.*/triggers`` adresindeki RPM belgelerinden alıntıdır. 
+endif::rhel[]
+
+[id="kabuk-disi-betikleri-spec-dosyasinda-kullanmak"]
+==== Kabuk Dışı Betikleri SPEC Dosyasında Kullanmak
+
+`-p` isimli betikçi parametresi, SPEC dosyası içerisinde belirli bir yorumlayıcıyı çağırmamıza izin verir. Öntanımlı değer `-p{nbsp}/bin/sh`'dir. Aşağıdaki açıklayıcı örnekte `pelaba.py` dosyasının kurulumundan sonra ekrana bir mesajı bastıran bir betiği görmektesiniz. 
+
+. `pello.spec` dosyasını açın.
+
+. Şu satırı bulun:
++
+[source,specfile]
+----
+install -m 0644 %{name}.py* %{buildroot}/usr/lib/%{name}/
+----
++
+Bu satırın altına, şu kodu ekleyin:
++
+[source,specfile]
+----
+%post -p /usr/bin/python3
+print("Hey! Bu bir {} kodu!".format("python"))
+----
+
+. xref:rpm-insa-etmek[] kısmına göre paketinizi inşa edin.
+
+ifdef::community[]
+. Paketinizi kurun:
++
+[source,bash]
+----
+# dnf install /home/<username>/rpmbuild/RPMS/noarch/pello-0.1.1-1.fc27.noarch.rpm
+----
++
+Paketleri kurduktan sonra çıktıda şu mesajı göreceksiniz: 
++
+[source]
+----
+Installing       : pello-0.1.1-1.fc27.noarch                              1/1
+Running scriptlet: pello-0.1.1-1.fc27.noarch                              1/1
+Hey! Bu bir python kodu!
+----
+endif::community[]
+
+ifdef::rhel[]
+. Install your package:
++
+[source,bash]
+----
+# yum install /home/<username>/rpmbuild/RPMS/noarch/pello-0.1.1-1.fc27.noarch.rpm
+----
++
+Paketleri kurduktan sonra çıktıda şu mesajı göreceksiniz: 
++
+[source]
+----
+Installing       : pello-0.1.1-1.fc27.noarch                              1/1
+Running scriptlet: pello-0.1.1-1.fc27.noarch                              1/1
+Hey! Bu bir python kodu!
+----
+endif::rhel[]
+
+[NOTE]
+--
+* Bir Python{nbsp}3 betiği kullanmak için: SPEC dosyasındaki `install -m` satırı altında `%post -p /usr/bin/python3` satırını ekleyin. 
+
+* Bir Lua betiği kullanmak için: SPEC dosyasındaki `install{nbsp}-m` satırı altına `%post -p <lua>` satırını ekleyin. 
+
+* Bu yolla dilediğiniz yorumlayıcıyı SPEC dosyasında kullanabilirsiniz. 
+--
+
+[[rpmde-kosullu-ifadeler]]
+== RPM'de Koşullu İfadeler
+
+Koşullu ifadeler, SPEC dosyasının çeşitli kısımlarında kullanılabilir. 
+
+Koşullu ifadeler çoğunlukla şunlar için kullanılır:
+
+* mimariye özgü durumlar için
+* işletim sistemine özgü durumlar için
+* işletim sisteminin sürümleri arasındaki uyumluluk sorunlarıyla başa çıkmak için
+* makroların varlığını ve tanımını sorgulamak için
+
+=== Koşullu İfadelerin Sözdizimi
+
+Eğer _ifade_ doğruysa bir şeyler yap:
+
+  %if ifade
+  ...
+  %endif
+
+Eğer _ifade_ doğruysa bir şeyler yap. Değilse, başka bir şey yap:
+
+  %if ifade
+  ...
+  %else
+  ...
+  %endif
+
+// Eğer _ifade_ yanlışsa bir şeyler yap:
+
+//  %if !ifade
+//   ...
+//   %endif
+
+// Eğer ifade yanlışsa bir şeyler yap. Değilse, başka bir şey yap:
+
+//  %if !expression
+//  ...
+//  %else
+//  ...
+//  %endif
+
+=== Koşullu İfadelerin Örnekleri:
+
+==== `%if` koşulu
+
+  %if 0%{?rhel} == 6
+  sed -i '/AS_FUNCTION_DESCRIBE/ s/^/#/' configure.in
+  sed -i '/AS_FUNCTION_DESCRIBE/ s/^/#/' acinclude.m4
+  %endif
+
+Bu koşul, RHEL6 ve diğer işletim sistemleri için AS_FUNCTION_DESCRIBE makrosunun desteğini düzenler. Eğer paket RHEL için inşa edilirse `%rhel` makrosu tanımlanmış olacaktır ve RHEL sürümünü verecektir. Eğer bu değer 6 ise, bu paket RHEL 6 için derlenecektir ve RHEL 6 tarafından desteklenmeyen AS_FUNCTION_DESCRIBE makrosunu otomatik yapılandırma betiklerinden silecektir. 
+
+ifdef::community[]
+  %if 0%{?el6}
+  %global ruby_sitearch %(ruby -rrbconfig -e 'puts Config::CONFIG["sitearchdir"]')
+  %endif
+
+Bu koşul ise Fedora 17 ile daha yeni versiyonlarını ve RHEL 6'nın `%ruby_sitearch` makro desteğini düzenler. Fedora 17 ve daha yeni sürümleri `%ruby_sitearch` makrosunu desteklerken RHEL6 desteklemez. Eğer çalışan işletim sistemi RHEL6 ise, `%ruby_sitearch` makrosunu tanımlar. Dikat edilmelidir ki `0%{?el6}` ile önceki örnekte gördüğümüz `0%{?rhel} == 6` ile aynıdır ve paketin RHEL 6 için derlenip derlenmediğini yoklar. 
+endif::community[]
+
+ifdef::community[]
+  %if 0%{?fedora} >= 19
+  %global with_rubypick 1
+  %endif
+
+Bu koşulda ise rubypick desteği yoklanır. Eğer işletim sistemi Fedora 19 veya daha yeniyse, rubypick destekleniyordur. 
+endif::community[]
+
+  %define ruby_archive %{name}-%{ruby_version}
+  %if 0%{?milestone:1}%{?revision:1} != 0
+  %define ruby_archive %{ruby_archive}-%{?milestone}%{?!milestone:%{?revision:r%{revision}}}
+  %endif
+
+Bu koşulda da makro tanımları yoklanır. Eğer `%milestone` ve `%revision` makroları tanımlanmışsa tarball ismini belirten `%ruby_archive` makrosu tekrar tanımlanır. 
+
+==== `%if` Koşulunun Özel Türleri 
+
+`%ifarch`,`%ifnarch` ve `%ifos` koşulları `%if` koşulunun özelleştirilmiş türleridir. Bu türler sık sık kullanıldığı için kendi makroları vardır. 
+
+
+===== `%ifarch` koşulu
+
+`%ifarch` koşulu genellikle belirli bir mimariye özgü kısmını tetiklemek için kullanılır. Hemen ardından bir veya birden çok mimari belirtir ve her biri virgüller ya da boşluklarla ayrılır. 
+
+  %ifarch i386 sparc
+  ...
+  %endif
+
+
+`%ifarch` ve `endif` arasında kalan kısım yalnızca 32 bit AMD/Intel mimariler veya Sun SPARC temelli sistemlerde işlenir. 
+
+===== `%ifnarch` koşulu
+
+`%ifnarch` koşulu ise `%ifarch` koşulunun tam tersidir. 
+
+  %ifnarch alpha
+  ...
+  %endif
+
+`%ifnarch` ve `%endif` arasında kalan kısım Alfa işlemcilerini kullanan sistemler **dışında** bütün sistemlerde kullanılacaktır. 
+
+===== `%ifos` koşulu
+
+`%ifos` koşulu da belirtilen işletim sistemi üzerinde uygulanacak işlemleri belirtir. Bir veya birden çok işletim sistemi belirtilebilir. 
+
+  %ifos linux
+  ...
+  %endif
+
+`%ifos` ve `%endif` arasında kalan kısım, eğer inşa bir Linux sistem üzerinde gerçekleştirilirse çalıştırılacak işlemleri içerir. 

@@ -7,7 +7,7 @@ License:        GPLv3+
 URL:            https://www.example.com/%{name}
 Source0:        https://www.example.com/%{name}/releases/%{name}-%{version}.tar.gz
 
-Patch0:         cello-output-first-patch.patch
+Patch0:         celaba-ciktisi-ilk-yama.patch
 
 BuildRequires:  gcc
 BuildRequires:  make
@@ -36,7 +36,5 @@ make %{?_smp_mflags}
 
 
 %changelog
-* Tue Sep 1 2020 Emrecan Şuşter <emrecansuster@lilyum.org> - 1.0-1
-- Türkçeleştirildi. 
 * Tue May 31 2016 Adam Miller <maxamillion@gmail.com> - 1.0-1
-- First cello package
+- İlk celaba paketi

@@ -34,7 +34,5 @@ install -m 0755 %{name} %{buildroot}/%{_bindir}/%{name}
 
 
 %changelog
-* Tue Sep 1 2020 Emrecan Şuşter <emrecansuster@lilyum.org> - 0.1-1
-- Türkçeleştirildi. 
 * Tue May 31 2016 Adam Miller <maxamillion@fedoraproject.org> - 0.1-1
 - First bello package

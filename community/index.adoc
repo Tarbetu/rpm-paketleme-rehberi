@@ -20,7 +20,7 @@ include::source/yazilimi-hazirlamak.adoc[leveloffset=+1]
 
 include::source/yazilimi-paketlemek.adoc[leveloffset=+1]
 
-include::source/gelismis-konular.adoc[leveloffset=+1]
+include::source/ileri-duzey-konular.adoc[leveloffset=+1]
 
 include::source/rhel7-ozellikleri.adoc[leveloffset=+1]
 
