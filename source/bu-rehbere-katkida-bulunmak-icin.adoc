@@ -1,0 +1,6 @@
+[[bu-rehbere-katkida-bulunmak]]
+= Bu Rehbere Katkıda Bulunmak İçin:
+
+Bu rehberin orijinalinin yayınlandığı https://github.com/redhat-developer/rpm-packaging-guide["RPM Packaging Guide" deposu] üzerinden sorun (issue) veyahut birleştirme isteği (pull request) yollayarak katkıda bulunabilirsiniz. İki türden de katkılar memnuniyetle karşılanacaktır ve hiçbir çekince hissetmenize gerek yoktur.
+
+Bu rehberin şu an okuduğunuz Türkçe çevirisine ise aynı şekilde https://github.com/Tarbetu/rpm-paketleme-rehberi["RPM Paketleme Rehberi" deposu] üzerinden katkıda bulunabilirsiniz. Tıpkı orijinal metne yapacağınız katkılar gibi, bu depoya da sorunlar (issue) ve birleştirme istekleri (pull request) aracılığıyla katkıda bulunabilirsiniz. 

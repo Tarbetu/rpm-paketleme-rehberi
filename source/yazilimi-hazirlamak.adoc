@@ -8,6 +8,7 @@ Bu bölüm bir RPM paketçisinin bilmesi gereken kaynak kodu ve yazılım oluşt
 
 **Kaynak kodu** bir dosyanın bilgisayara nasıl derlenmesi gerektiğinin anlatıldığı ve insanlar tarafından okunabilen talimatlardır. Kaynak kodları, bir programlama dili aracılığıyla hazırlanır. Bkz:
 ifdef::community[https://tr.wikipedia.org/wiki/Programlama_dili[Programlama Dili]]
+ifdef::rhel[Programlama Dili]
 
 Bu klavuz farklı programlama dillerinde yazılmış ``Merhaba Dünya`` programının üç sürümünü ele alır. Farklı programlama dilleriyle yazılmış bu programlar farklı şekilde paketlenir ve bir RPM paketçisinin karşılaşacağı üç farklı durumu özetler.
 
@@ -37,7 +38,9 @@ print("Merhaba Dünya")
 
 ----
 
-https://tr.wikipedia.org/wiki/C_(programlama_dili)[C] ile yazılmış bir ``Merhaba Dünya``:
+ifdef::community[https://tr.wikipedia.org/wiki/C_(programlama_dili)[C]]
+ifdef::rhel[C]
+ile yazılmış bir ``Merhaba Dünya``:
 
 ``celaba.c``
 
@@ -70,14 +73,23 @@ Not: Programlamayı bilmek yazılım paketlemek için gerekli değildir ama fayd
 
 **(Mimariye) Yerel derlenmiş** yazılım, makine koduna dönüştürülen bir programlama dilinde yazılmış yazılımdır. Bu tarz yazılımlar tek başına, çalıştırılabilir ikili dosyalar olarak çalıştırılabilir. 
 
-Bu yolla derlenmiş RPM paketleri belirli bir https://tr.wikipedia.org/wiki/Bilgisayar_organizasyonu[mimariye] yöneliktir. Yani, sizin 64 bit (x86_64) mimarisine yönelik hazırladığınız yazılım 32 bit (x86) mimarisinde çalıştırılamaz. Bu yazılımların paketlerinin isimlerinde hangi mimariyi hedef aldığı belirtilir. 
+Bu yolla derlenmiş RPM paketleri belirli bir 
+ifdef::community[https://tr.wikipedia.org/wiki/Bilgisayar_organizasyonu[mimariye]]
+ifdef::rhel[mimariye]
+yöneliktir. Yani, sizin 64 bit (x86_64) mimarisine yönelik hazırladığınız yazılım 32 bit (x86) mimarisinde çalıştırılamaz. Bu yazılımların paketlerinin isimlerinde hangi mimariyi hedef aldığı belirtilir. 
 
 [[yorumlanan-kod]]
 === Yorumlanan Kod
 
-https://www.gnu.org/software/bash/[bash] ve https://www.python.org/[Python] gibi bazı programlama dilleri doğrudan makine diline derlenmez. Bunun yerine, bu dillerin dillerde yazılan kaynak kodları herhangi bir ön dönüşüme tabii tutulmaksızın adım adım çalıştılır. Bu kodları bir https://tr.wikipedia.org/wiki/Yorumlayıcı[Dil Yorumlayıcısı] tarafından veya Dil Sanal Makinesi tarafından işlenir. 
+https://www.gnu.org/software/bash/[bash] ve https://www.python.org/[Python] gibi bazı programlama dilleri doğrudan makine diline derlenmez. Bunun yerine, bu dillerin dillerde yazılan kaynak kodları herhangi bir ön dönüşüme tabii tutulmaksızın adım adım çalıştılır. Bu kodları bir
+ifdef::community[https://tr.wikipedia.org/wiki/Yorumlayıcı[Dil Yorumlayıcısı]]
+ifdef::rhel[Dil Yorumlayıcısı]
+tarafından veya Dil Sanal Makinesi tarafından işlenir. 
 
-Bu yazılımlar belirli bir https://tr.wikipedia.org/wiki/Bilgisayar_organizasyonu[mimariye] yönelik değildir. Dolayısıyla, bu yazılımların RPM paketlerinin isminde ``noarch`` ibaresi bulunur.
+Bu yazılımlar belirli bir 
+ifdef::community[https://tr.wikipedia.org/wiki/Bilgisayar_organizasyonu[mimariye]]
+ifdef::rhel[mimariye]
+yönelik değildir. Dolayısıyla, bu yazılımların RPM paketlerinin isminde ``noarch`` ibaresi bulunur.
 
 // İki tip yorumlanan dil vardır: bayt derlenenler ve ham hâliyle yorumlananlar. Bu programların inşa süreçleri iki tip içinde farklıdır. 
 
@@ -108,7 +120,10 @@ Bu kısım, kaynak kodundan bir yazılımı inşa etmeyi açıklar.
 [[yerel-derlenen-kodu-kaynaktan-insa-etmek]]
 === Yerel Derlenen Kod
 
-Bu örnekte https://tr.wikipedia.org/wiki/C_(programlama_dili)[C] ile yazılmış ``celaba.c``dosyasını çalıştırılabilir bir dosyaya dönüştüreceksiniz. 
+Bu örnekte 
+ifdef::community[https://tr.wikipedia.org/wiki/C_(programlama_dili)[C]]
+ifdef::rhel[C]
+ile yazılmış ``celaba.c``dosyasını çalıştırılabilir bir dosyaya dönüştüreceksiniz. 
 
 ``celaba.c``
 
@@ -126,7 +141,9 @@ int main(void) {
 [[elle-insa]]
 ==== Elle İnşa
 
-https://tr.wikipedia.org/wiki/C_(programlama_dili)[C] kaynak kodlarını derlemek için kullanılan "GNU Derleyici Koleksiyonu"nu (https://gcc.gnu.org/[GCC]) çalıştıracağız. 
+ifdef::community[https://tr.wikipedia.org/wiki/C_(programlama_dili)[C]]
+ifdef::rhel[C]
+kaynak kodlarını derlemek için kullanılan "GNU Derleyici Koleksiyonu"nu (https://gcc.gnu.org/[GCC]) çalıştıracağız. 
 
 [source,bash]
 ----
@@ -212,9 +229,14 @@ Hem elle, hem de otomatik olarak bir programı derlemiş bulunmaktasınız.
 
 [NOTE]
 ====
-İki örnekte de göreceğiniz, dosyanın başındaki ``#!`` satırı programlama dilinin bir parçası değildir ve https://en.wikipedia.org/wiki/Shebang_%28Unix%29[mevzu (shebang)] olarak anılır. (Link İngilizcedir.)
+İki örnekte de göreceğiniz, dosyanın başındaki ``#!`` satırı programlama dilinin bir parçası değildir ve 
+ifdef::community[https://en.wikipedia.org/wiki/Shebang_%28Unix%29[mevzu (shebang)]]
+ifdef::rhel[mevzu (shebang]
+olarak anılır. (Bağlantı İngilizcedir.)
 
-https://en.wikipedia.org/wiki/Shebang_%28Unix%29[Mevzular] bir yazı dosyasının çalıştırılabilir bir dosya olarak ele alınmasına izin verir. Sistemin program yükleyicisi bu satırı özellikle arar ve bu satır üzerinde bulunan ikili programla çalıştır ki bu ilgili programlama dilinin yorumlayıcısıdır.
+ifdef::community[https://en.wikipedia.org/wiki/Shebang_%28Unix%29[Mevzular]]
+ifdef::rhel[Mevzular]
+bir yazı dosyasının çalıştırılabilir bir dosya olarak ele alınmasına izin verir. Sistemin program yükleyicisi bu satırı özellikle arar ve bu satır üzerinde bulunan ikili programla çalıştır ki bu ilgili programlama dilinin yorumlayıcısıdır.
 ====
 
 [[bayt-derlenen-kod]]
@@ -234,7 +256,7 @@ print("Merhaba Dünya")
 
 Bayt derlenen programlar için gerekli diğer dillerden daha farklıdır. Bu yöntem dil üzerine kuruludur, dilin sanal makinesini gerektirir ve kullanılan araçlar/süreçler dile aittir. 
 
-Not: https://www.python.org/[Python] çoğunlukla bayt olarak derlenir, ancak bu bahsettiğimiz şekilde değil. Bahsi geçen yöntem topluluk standarlarına uyumlu olmayı değil sade olmayı gerektirir. Gerçek dünyada kullanılan Python rehberleri için şu bağlantıya bakabilirsiniz: 
+NOTE: https://www.python.org/[Python] çoğunlukla bayt olarak derlenir, ancak bu bahsettiğimiz şekilde değil. Bahsi geçen yöntem topluluk standarlarına uyumlu olmayı değil sade olmayı gerektirir. Gerçek dünyada kullanılan Python rehberleri için şu bağlantıya bakabilirsiniz: 
 https://docs.python.org/2/library/distribution.html[Software Packaging and
 Distribution (İngilizce)].
 
@@ -398,8 +420,14 @@ Tebrikler! Bir yama oluşturdunuz, sonra programı yamaladınız, yamalı progra
 [[ihtiyari-yapilar-kurma]]
 == İhtiyari Yapılar Kurma
 
-community[https://tr.wikipedia.org/wiki/Linux[Linux] ve Unix benzeri işletim sistemlerinin büyük bir avantajı https://en.wikipedia.org/wiki/Filesystem_Hierarchy_Standard[Dosya Sistemi Hiyerarşisi Standartları]dır. Bu standartlar, hangi dizinde hangi dosyanın depolanacağınıbelirtir. RPM paketlerinden kurulan dosyalar ise Dosya Sistemi Hiyerarşisine uygun olmalıdır. Örneğin, çalıştırılabilir bir dosya https://en.wikipedia.org/wiki/PATH_%28variable%29[PATH] değişkeninde belirtilen bir dizin altında tutulmalıdır. 
-
+ifdef::community[https://tr.wikipedia.org/wiki/Linux[Linux]]
+ifdef::rhel[Linux]
+ve Unix benzeri işletim sistemlerinin büyük bir avantajı 
+ifdef::community[https://en.wikipedia.org/wiki/Filesystem_Hierarchy_Standard[Dosya Sistemi Hiyerarşisi Standartlarıdır]]
+ifdef::rhel[Dosya Sistemi Hiyerarşisi Standartlarıdır]. Bu standartlar, hangi dizinde hangi dosyanın depolanacağınıbelirtir. RPM paketlerinden kurulan dosyalar ise Dosya Sistemi Hiyerarşisine uygun olmalıdır. Örneğin, çalıştırılabilir bir dosya 
+ifdef::community[https://en.wikipedia.org/wiki/PATH_%28variable%29[PATH]]
+ifdef::rhel[PATH] 
+değişkeninde belirtilen bir dizin altında tutulmalıdır. 
 
 Bu belgenin bağlamında, bir __İhtiyari Yapı__ RPM aracılığıyla sisteme kurulan herhangi bir şeydir. Bu RPM ve sistem için bir betik, paketin içerdiği kaynak kodundan derlenen bir ikili bir dosya, önceden derlenmiş ikili bir dosya veya başka bir dosya olabilir. 
 
@@ -420,7 +448,10 @@ Bu örnekte, ``belaba`` dosyasını ``/usr/bin`` içerisine ``install`` komutuyl
 $ sudo install -m 0755 belaba /usr/bin/belaba
 
 ----
-``belaba`` isimli dosyamız https://en.wikipedia.org/wiki/PATH_%28variable%29[$PATH] değişkeninde listelenmiş bir dizinde bulunmakta. Artık herhangi bir dizinde, ``belaba`` dosyasını bütün konumu belirtmeden çalıştırabilirsiniz. 
+``belaba`` isimli dosyamız 
+ifdef::community[https://en.wikipedia.org/wiki/PATH_%28variable%29[$PATH]]
+ifdef::rhel[$PATH] 
+değişkeninde listelenmiş bir dizinde bulunmakta. Artık herhangi bir dizinde, ``belaba`` dosyasını bütün konumu belirtmeden çalıştırabilirsiniz. 
 
 
 [source,bash]
@@ -473,13 +504,10 @@ $ sudo make install
 install -m 0755 celaba /usr/bin/celaba
 
 ----
-``celaba`` programını https://en.wikipedia.org/wiki/PATH_%28variable%29[$PATH] değişkeni içerisinde tanımlanmış dizinlerden birisine eklemiş oldunuz. Artık, ``celaba``'yı tam konumunu belirtmeden dilediğiniz gibi çalıştırabilirsiniz. 
-
-Now ``cello`` is in a directory that is listed in the
+``celaba`` programını 
 ifdef::community[https://en.wikipedia.org/wiki/PATH_%28variable%29[$PATH]]
-ifdef::rhel[$PATH]
-variable. Therefore,
-you can execute ``cello`` from any directory without specifying its full path:
+ifdef::rhel[$PATH] 
+değişkeni içerisinde tanımlanmış dizinlerden birisine eklemiş oldunuz. Artık, ``celaba``'yı tam konumunu belirtmeden dilediğiniz gibi çalıştırabilirsiniz. 
 
 [source,bash]
 ----
@@ -503,7 +531,9 @@ Not: Kaynak kodu arşivleme işi çoğunlukla RPM paketçisinin görevi değildi
 
 
 
-Yazılımlar bir https://tr.wikipedia.org/wiki/Yazılım_lisansı[yazılım lisansı] aracılığıyla lisanslanmalıdır. Biz örnek olarak https://www.gnu.org/licenses/quick-guide-gplv3.html[GPLv3] lisansını ele alacağız. Lisans metnini örnek programlarımızın ``LICENCE`` dosyasında sunacağız. Bir RPM paketçisi, paketlerken lisans dosyaları ile ilgilenmelidir. 
+Yazılımlar bir 
+ifdef::community[https://tr.wikipedia.org/wiki/Yazılım_lisansı[yazılım lisansı]]
+ifdef::rhel[yazılım lisansı] aracılığıyla lisanslanmalıdır. Biz örnek olarak https://www.gnu.org/licenses/quick-guide-gplv3.html[GPLv3] lisansını ele alacağız. Lisans metnini örnek programlarımızın ``LICENCE`` dosyasında sunacağız. Bir RPM paketçisi, paketlerken lisans dosyaları ile ilgilenmelidir. 
 
 Aşağıdaki örnekte bir lisans dosyası oluşturduk:
 
@@ -603,7 +633,10 @@ $ mv /tmp/pello-0.1.1.tar.gz ~/rpmbuild/SOURCES/
 [[celaba]]
 === celaba
 
-__celaba__ yazılımı, https://tr.wikipedia.org/wiki/C_(programlama_dili)[C] ile ``Merhaba Dünya`` yazmamızı sağlıyor. Bu yazılım kendi içerisinde yalnızca ``celaba.c``'yi ve ``Makefile`` dosyasını içeriyor ve oluşturacağımız ``.tar.gz`` arşivinde ``LICENCE`` dışında yalnızca iki dosya olacak. Bu yazılımın sürüm numarasını ``1.0`` olarak düşünebiliriz. 
+__celaba__ yazılımı, 
+ifdef::community[https://tr.wikipedia.org/wiki/C_(programlama_dili)[C]]
+ifdef::rhel[C]
+ile ``Merhaba Dünya`` yazmamızı sağlıyor. Bu yazılım kendi içerisinde yalnızca ``celaba.c``'yi ve ``Makefile`` dosyasını içeriyor ve oluşturacağımız ``.tar.gz`` arşivinde ``LICENCE`` dışında yalnızca iki dosya olacak. Bu yazılımın sürüm numarasını ``1.0`` olarak düşünebiliriz. 
 
 ``patch`` dosyasını arşiv ile beraber dağıtıma çıkartmadığımıza dikkat edin. RPM Paketleyicisi yamayı RPM derlenirken uygular. Yama, ``.tar.gz`` dosyası ile beraber ``~/rpmbuild/SOURCES/`` dizinine yerleştirilecek.
 

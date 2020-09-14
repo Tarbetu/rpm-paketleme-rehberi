@@ -1,34 +1,17 @@
-[appendix]
-= New features of RPM in RHEL 7
+[fihrist]
+= RHEL 7 ile Beraber Gelen Yeni RPM Özellikleri
 
-This list documents most noticable changes in RPM packaging between Red Hat
-Enterprise Linux 6 and 7.
+Dokümanın bu kısmında Red Hat Enterprise Linux 6 ve 7. sürüm arasında dikkat edilmesi gereken farklar anlatılmaktadır.
 
-* A new command, ``rpmkeys``, used for keyring import and signature verification
-has been added.
-
-* A new command, ``rpmspec``, used for spec queries and parsed output has been
-added.
-* A new command, ``rpmsign``, used for package signing has been added.
-* The ``posix.exec()``  and ``os.exit()`` extensions embedded in ``%{lua:...}``
-scripts fail the script unless called from a child process created with the
-``posix.fork()`` scriptlet.
-* The ``%pretrans`` scriptlet failure causes the package installation to be
-skipped.
-* Scriptlets can be macro-expanded and queryformat-expanded at runtime.
-* Pre-transaction and post-transaction scriptlet dependencies can now be
-correctly expressed with ``Requires(pretrans)`` and ``Requires(posttrans)``
-scriptlets.
-* The ``OrderWithRequires`` tag for supplying additional ordering hints has been
-added. The tag follows ``Requires`` tag syntax, but does not generate actual
-dependencies. The ordering hints are treated as if they were ``Requires`` when
-calculating the transaction order, only if the involved packages are present in
-the same transaction.
-* The ``%license`` flag can be used in the ``%files`` section. This flag can be
-used similar to the ``%doc`` flag to mark files as licenses, which need to be
-installed despite the ``--nodocs`` option.
-* The ``%autosetup`` macro for automating patch application, with optional
-distributed version control system integration has been added.
-* The  automatic dependency generator has been rewritten into extensible and
-customizable rule based system with built-in filtering.
-* The OpenPGP V3 public keys are no longer supported.
+* Anahtarlık ve imza denetimi için ``rpmkeys`` komutu eklendi. 
+* SPEC dosyalarının sorgulanması ve taranması için ``rpmspec`` komutu eklendi. 
+* Paketlerin imzalanması için ``rpmsign`` komutu eklendi. 
+* ``%{lua:...}`` içerisinde gömülmüş betiklerde çağrılan ``posix.exec()`` ve ``os.exit()`` eklentileri, ``posix.fork()`` betikçisinin altsüreci olarak çağırılmadıkları sürece hata vereceklerdir.
+* ``%pretrans`` betikçi hatası, paket kurulumunun atlanmasına neden olur.
+* Betikçiler, çalışma zamanında makro ve sorgu biçimi (queryformat) şeklinde genişletilebilir.
+* İşlem öncesi ve işlem sonraki betikçilerinin bağımlılıkları artık ``Requires(pretrans)`` ve ``Requires(posttrans)`` betikçileriyle ifade edilebilir. 
+* Fazladan sıralama ipucularını ifade etmek için ``OrderWithRequires`` etiketi eklendi. Bu etiket, ``Requires`` etiketinin sözdizimini taklit eder ancak gerçek bağımlılıklar oluşturmaz. Sıralama ipuçlarında belirtilenler eğer işlem esnasında varsa ``Requires``'da belirtilmiş gibi ele alınırlar. 
+* ``%license`` bayrağı ``%files`` kısmında kullanılabilirler. Tıpkı lisans dosyalarını işaretlerken tıpkı ``%doc`` gibi kullanılırlar, ancak ``-nodocs`` seçeneğinden etkilenmezler.
+* Otomatik yama eklemek için kullanılan ``%autosetup`` makrosu, dilenirse bir versiyon kontrol sistemiyle beraber kullanılabilirler. 
+* Otomatik bağımlılık oluşturucusu gömülü bir filtrelemeyle beraber genişletilebilir ve özelleştirilebilir bir şekilde yeniden yazıldı.
+* OpenPGP V3 genel anahtarları artık desteklenmeyecektir. 

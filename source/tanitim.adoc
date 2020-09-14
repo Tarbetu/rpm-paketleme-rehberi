@@ -12,16 +12,16 @@ xref:yazilim-paketlemek[].
 Gelişmiş paketleme senaryoları.:: Bu kısım, RPM paketçilerinin karşısına çıkan 
 zorlu RPM paketleme senaryoları için bir kaynakçadır. xref:ileri-duzey-konular[] kısmını inceleyin.
 
-//ifdef::community[]
-//[[pdf-version]]
-//== PDF Version
+ifdef::community[]
+[[pdf-version]]
+== PDF Version
 
-//Dilerseniz şu adresten PDF versiyonunu inceleyebilirsiniz:
-//https://rpm-packaging-guide.github.io/rpm-packaging-guide.pdf
-//endif::community[]
-//
-//[[document-conventions]]
-== Dokümasyon Anahtarları
+Dilerseniz şu adresten PDF versiyonunu inceleyebilirsiniz:
+https://rpm-packaging-guide.github.io/rpm-packaging-guide.pdf
+Kendime not: Yayından sonra link Türkçeleşecek
+endif::community[]
+
+== Doküman Anahtarları
 
 Bu doküman anlatımı kolaylaştırmak üzere şöyle anahtarlar kullanır:
 
@@ -60,7 +60,6 @@ print("Merhaba Dünya")
 
 ifdef::topluluk[]
 Bazı terimlerle ilk kez karşılaşıldığı zaman ilgili belgeye yönlendirilir.
-//The first occurrences of some terms link to their respective documentation.
 endif::topluluk[]
 
 *   Bazı yazılımlar, komutlar ve komut içerisinde bulunabilecek şeyler ``eş aralıklı`` fontlarla gösterilir. 
