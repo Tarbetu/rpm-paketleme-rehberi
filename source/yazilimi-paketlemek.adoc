@@ -16,11 +16,11 @@ endif::rhel[]
 ifdef::community[]
 Bu dağıtımlar, http://rpm.org/[RPM] paketleme usulünü kullanır. 
 
-Yine de, bu yazı çoğunlukla bahsi geçen sistemleri hedef alsa bu rehber çoğu https://en.wikipedia.org/wiki/List_of_Linux_distributions#RPM-based[RPM temelli] dağıtıma uygulanabilir. Ancak dağıtımların kendisine özgü rehberleri, makroları ve önhazırlık maddeleri incelenmelidir. 
+Yine de, yazıda çoğunlukla bahsi geçen sistemler hedef alınsa da bu rehber çoğu https://en.wikipedia.org/wiki/List_of_Linux_distributions#RPM-based[RPM temelli] dağıtıma uygulanabilir. Ancak dağıtımların kendisine özgü rehberleri, makroları ve önhazırlık maddeleri incelenmelidir. 
 endif::community[]
 
 ifdef::rhel[]
-Bu rehberde RHEL hedeflenmesine rağmen bu rehberdeki pek çok adım RPM temelli dağıtımlar için uyarlanabilir. Fakat bazı talimatların dağıtıma göre uyarlanması gereklidir. Örneğin: kurulum öncesi maddeler, kılavuzlar ve makrolar.
+Rehberde RHEL hedeflenmesine rağmen bu rehberdeki pek çok adım RPM temelli dağıtımlar için uyarlanabilir. Fakat bazı talimatların dağıtıma göre uyarlanması gereklidir. Örneğin: kurulum öncesi maddeler, kılavuzlar ve makrolar.
 endif::rhel[]
 
 Bu rehber, okuyucunun Linux veya başka bir işletim sistemiyle ilgili herhangi bir altyapısı olmadığını varsayar. 
@@ -47,12 +47,12 @@ ismi verilen bir arşiv türüdür. ``RPM`` paket yöneticisi üstveri aracılı
 * Kaynak RPM (SRPM, Source RPM'in kısaltmasıdır)
 * İkili RPM
 
-Kaynak ve ikili RPMler aynı dosya biçimini ve araçlarını kullanırlar ancak farklı içeriklere ve amaçlara sahiptirler. Bir SRPM, kaynak kodunu ve isteğe bağlı olarak yamalarını ve bir SPEC dosyasını içerir ki SPEC, kaynak kodunun nasıl ikili RPM'e çevirilmesi gerektiğini içerir. Bir ikili RPM ise kaynak kodunun ve yamalarının derlenmiş hâlidir.
+Kaynak ve ikili RPMler aynı dosya biçimini ve araçlarını kullanırlar ancak farklı içeriklere ve amaçlara sahiptirler. SRPM, kaynak kodunu ve isteğe bağlı olarak yamalarını ve SPEC dosyasını içerir ki SPEC, kaynak kodunun nasıl ikili RPM'e çevirilmesi gerektiğini içerir. İkili RPM ise kaynak kodunun ve yamalarının derlenmiş hâlidir.
 
 [[rpm-paketleme-araclari]]
 === RPM Paketleme Araçları
 
-xref:on-kosullar[]'da belirtilmiş ``rpmdevtools`` paketi pek RPM paketlemek için pek çok aracı içerir. Bu araçları listemek için şu komutu çalıştırın:
+xref:on-kosullar[]'da belirtilmiş ``rpmdevtools`` paketi pek RPM paketlemek için pek çok aracı içerir. Araçları listemek için şu komutu çalıştırın:
 
 [source,bash]
 ----
@@ -60,7 +60,7 @@ $ rpm -ql rpmdevtools | grep bin
 
 ----
 
-Bu araçlar hakkında bilgi edinmek için o araçların kullanım talimatlarını veya yardım yazılarını inceleyebilirsiniz. 
+Araçlar hakkında bilgi edinmek için kullanım talimatlarını veya yardım yazılarını inceleyebilirsiniz. 
 
 [[rpm-paketlemesi-icin-calisma-alani]]
 === RPM Paketlemesi İçin Çalışma Alanı
@@ -83,22 +83,22 @@ $ tree ~/rpmbuild/
 
 ----
 
-Oluşturulan bu dizinler şu amaçlara hizmet eder:
+Oluşturulan dizinler şu amaçlara hizmet eder:
 
 [cols="20%,80%"]
 |====
 | Dizin     | Amaç
 | BUILD     | Bir paket inşa edildiği zaman gereken ``%buildroot`` dizinleri burada oluşturulur. Bu dizinleri incelemek, hata kayıtlarının yetersiz kaldığı zamanlar nerede hata çıktığını anlamaya yardımcı olur.
-| RPMS      | İkili RPMler mimarilere göre ayrılmış altdizinlere göre burada oluşturulur. Bu dizinler ``x86_64`` veya ``noarch`` olabilir. 
+| RPMS      | İkili RPMler mimarilere göre ayrılmış altdizinlere göre burada oluşturulur. Bunlar ``x86_64`` veya ``noarch`` olabilir. 
 | SOURCES   | Burada paketçinin sıkıştırılmış kaynak kodu arşivleri ve yamaları bulunur. ``rpmbuild`` komutu burayı arar.
 | SPECS     | Paketçi SPEC dosyalarını buraya yerleştirir. 
 | SRPMS     | Eğer ``rpmbuild`` paketi ikili RPM üretmek yerine SRPM inşa etmek için kullanılırsa, SRPMler burada oluşturulur. 
 |====
 
 [[spec-dosyasi-nedir]]
-=== Bir Spec Dosyası Nedir?
+=== Spec Dosyası Nedir?
 
-Eğer RPM paketlerini yemeğe benzetirsek SPEC dosyasını, ``rpmbuild`` aracının RPM pişirmek için baz aldığı bir yemek tarifi olarak düşünebiliriz. SPEC dosyası, inşa ortamına neler yapması gerektiğini çeşitli parçalar hâlinde bildirir. Bu parçalar, __Önsöz__ (__Preamble__) ve __Gövde__ (__Body__) olarak ikiye ayrılabilir. __Gövde__ kısmı, talimatların esas parçasını içerir. 
+Eğer RPM paketlerini yemeğe benzetirsek SPEC dosyasını, ``rpmbuild`` aracını RPM pişirmek için baz alınan yemek tarifi olarak düşünebiliriz. SPEC dosyası, inşa ortamına neler yapması gerektiğini çeşitli parçalar hâlinde bildirir. Bu parçalar, __Önsöz__ (__Preamble__) ve __Gövde__ (__Body__) olarak ikiye ayrılabilir. __Gövde__ kısmı, talimatların esas parçasını içerir. 
 
 [[onsoz-maddeleri]]
 ==== Önsöz Maddeleri 
@@ -110,22 +110,23 @@ Aşağıdaki tablo RPM Spec dosyasının Önsöz kısmında kullanılan maddeler
 | SPEC Yönergeleri  | Açıklama
 | ``Name``          | Paketin esas adı, SPEC dosyasının adıyla eşleşmelidir. 
 | ``Version``       | Yazılımın sürüm sayısını içerir. 
-| ``Release``       | Bu sürümün kaç defa yayınlandığını içerir. Normal olarak, ilk yayının değeri 1%{?dist} olarak belirlenir ve her yeni yayında sayı arttırılır. Yeni ``Version`` (sürüm) yayınlandığında tekrar 1 olur. 
+| ``Release``       | Bu sürümün kaç defa yayınlandığını içerir. Normalde ilk yayının değeri 1%{?dist} olarak belirlenir ve her yeni yayında sayı arttırılır. Yeni ``Version`` (sürüm) yayınlandığında tekrar 1 olur. 
 | ``Summary``       | Paketin kısa ve tek satırlık özetini içerir. 
 | ``License``       | Paketlenen yazılımın lisansını belirtir. 
 ifdef::community[]
-https://getfedora.org/[Fedora] gibi topluluk dağıtımlarda dağıtılan paketler, dağıtımın lisanslama rehberlerinde bahsedildiği şekilde özgür yazılım lisansına uygun olmak zorundadır. 
+https://getfedora.org/[Fedora] gibi topluluk dağıtımlarında dağıtılan paketler, dağıtımın lisanslama rehberlerinde bahsedildiği şekilde özgür yazılım lisansına uygun olmak zorundadır. 
 endif::community[]
 | ``URL``           | Dağıtım hakkında daha fazla bilginin alınabileceği tam adrestir. Çoğu zaman bu adres aynı zamanda yazılımın ana sayfasıdır. 
-| ``Source0``       | Yazılımın kaynak kodunu barındıran internet adresi veyahut dosya konumudur. Her an erişilebilecek ve güvenilir bir yere atıfta bulunması tavsiye edilir. Güvenilir yerden kasıt, paketçinin yerel depolaması yerine yazılımın İnternet sayfasıdır. Eğer gereklyise daha fazla SourceX yönergesi eklenebilir. (X yerine sayı gelir ve sayılar birer arttırılır. Örnek: Source1, Source2, Source3 gibi)
+| ``Source0``       | Yazılımın kaynak kodunu barındıran internet adresi veyahut dosya konumudur. Her an erişilebilecek ve güvenilir bir yere atıfta bulunması tavsiye edilir. Güvenilirden kasıt, paketçinin yerel depolaması yerine yazılımın internet sayfasıdır. Eğer gerekliyse daha fazla SourceX yönergesi eklenebilir. (X yerine sayı gelir ve sayılar birer birer arttırılır. Örnek: Source1, Source2, Source3 gibi)
 | ``Patch0``        | Eğer gerekliyse kaynak koduna uygulanacak olan ilk yama burada belirtilir. İhtiyaç duyulması hâlinde, SourceX gibi fazladan PatchX eklenebilir. (Patch1, Patch2, Patch3 gibi)
-| ``BuildArch``     | Eğer yazılım bir mimariye yönelik değilse, mesela tamamen yorumlanan bir dille yazılmışsa, bu yönerge ``BuildArch: noarch`` olarak ayarlanır. Eğer bu yönerge belirtilmezse, makinenin üzerinde çalıştığı mimariye ayarlanır. Örnek: ``x86_64``
-| ``BuildRequires`` | Derlenen bir dilde inşa edilmiş paketleri inşa etmek için gereken programların virgülle veya boşluklarla ayrıldığı listelerdir. ``BuildRequires`` yönergesi, aynı satırda kalındığı müddetçe, birden fazla yazılım belirtebilir. 
+| ``BuildArch``     | Yazılım bir mimariye yönelik değilse, mesela tamamen yorumlanan bir dille yazılmışsa, bu yönerge ``BuildArch: noarch`` olarak ayarlanır. Eğer bu yönerge belirtilmezse, makinenin üzerinde çalıştığı mimariye ayarlanır. Örnek: ``x86_64``
+| ``BuildRequires`` | Derlenen dilde yazılmış programı paketlemek için gereken programların virgülle veya boşluklarla ayrıldığı listelerdir. ``BuildRequires`` yönergesi, aynı satırda kalındığı müddetçe, birden fazla yazılım belirtebilir. 
 | ``Requires`` | Yazılımların kurulması için gereken bağımlılıkların virgülle veya  boşluklarlarla belirtildiği bir listedir. Tıpkı ``BuildRequires`` gibi, ``Requires`` yönergesi de satırına sadık kalınarak birden fazla yazılımı belirtebilir. 
 | ``ExcludeArch``   | Eğer yazılım belirli bir işlemci mimarisinde çalışmayacaksa, o mimariyi burada dışlayabilirsiniz. 
 |====
 
-``Name``, ``Version`` ve ``Release`` yönergeleri RPM paketinin dosya ismini oluşturur. RPM Paket geliştiricileri ve sistem yöneticileri bu üç direktifi **N-V-R** ya da **NVR** olarak isimlendirir. Çünkü RPM paketleri ``NAME-VERSION-RELEASE`` biçimiyle isimlendirilir. 
+``Name``, ``Version`` ve ``Release`` yönergeleri RPM paketinin dosya ismini oluşturur. RPM Paket geliştiricileri ve sistem yöneticileri bu üç direktiften 
+**N-V-R** ya da **NVR** olarak bahseder. Çünkü RPM paketleri ``NAME-VERSION-RELEASE`` biçimiyle isimlendirilir. 
 
 ``NAME-VERSION-RELEASE`` biçiminin örneklerini, ``rpm`` komutu aracılığıyla paketleri sorgulayarak bulabilirsiniz: 
 
@@ -135,42 +136,42 @@ $ rpm -q python
 python-2.7.5-34.el7.x86_64
 
 ----
-``python``, paket ismini gösteren ``Name`` direktifine, ``2.7.5``, ``Version`` direktifine ve ``34.el7`` ise ``Release`` direktifine atıfta bulunur. Son işaretçi olan ``x86_64`` ise mimariyi gösterir. **NVR** üçlüsünün aksine, mimari paketçinin insiyatifinde değildir fakat ``rpmbuild`` tarafından belirlenmiştir. Bu duruma bir istisna, paketin mimariden bağımsız olduğunu belirten ``noarch`` ibaresidir.
+``python``, paket ismini gösteren ``Name`` direktifine, ``2.7.5``, ``Version`` direktifine, ``34.el7`` ise ``Release`` direktifine atıfta bulunur. Son işaretçi olan ``x86_64`` ise mimariyi gösterir. **NVR** üçlüsünün aksine, mimari paketçinin insiyatifinde değildir fakat ``rpmbuild`` tarafından belirlenmiştir. Bu duruma bir istisna, paketin mimariden bağımsız olduğunu belirten ``noarch`` ibaresidir.
 
 [[govde-maddeleri]]
 ==== Gövde Maddeleri
 
-Aşağıdaki tablo, bir RPM SPEC dosyasının Gövde kısmındaki maddeleri listeler:
+Aşağıdaki tablo, RPM SPEC dosyasının __Gövde__ kısmındaki maddeleri listeler:
 
 [cols="20%,80%"]
 |====
 | SPEC Yönergesi   | Açıklama
-| ``%description`` | RPM'e paketlenen yazılım için tam bir açıklamayı içerir. Bu açıklama birden fazla satırı, hatta paragrafları içerebilir. 
-| ``%prep``        | Yazılımı kuruluma hazırlayan komutları içeren komut ya da komutları içerir. Örneğin, bu ``Source0`` içerisinde bulunan arşiv dosyasını çıkartmak olabilir. Bu yönerge, bir kabuk betiğini içerebilir. 
-| ``%build``       | Yazılımı makine koduna veyahut bayt koduna derlemek için kullanılan komut veyahut komutları içerir. 
-| ``%install``     | İstenen inşa yapılarını ``%builddir`` (Derleme konumunu içerir) içerisinden ``%buildroot``a taşıyan (paketlenecek dizin yapısını barındıran dizin) komut veya komutları içerir. Bu işlem çoğu zaman dosyaları ``~/rpmbuild/BUILD`` konumundan ``~/rpmbuild/BUILDROOT``'a taşımak anlamına gelir. Bu komutlar yalnızca paketi inşa ederken çalıştırılır, son kullanıcı paketi kurarken değil. Daha fazla bilgi için xref:spec-dosyalari-ile-calismak[] kısmını inceleyin.
+| ``%description`` | RPM'e paketlenen yazılım için detaylı açıklamayı içerir. Bu açıklama birden fazla satırı, hatta paragrafı içerebilir. 
+| ``%prep``        | Yazılımı kuruluma hazırlayan komut ya da komutları içerir. ``Source0`` içerisinde bulunan arşiv dosyasını çıkartmak buna bir örnek olabilir. Bu yönerge, bir kabuk betiğini de içerebilir. 
+| ``%build``       | Yazılımı makine koduna veyahut bayt koduna derlemek için kullanılan komut veya komutları içerir. 
+| ``%install``     | İstenen inşa yapılarını ``%builddir`` (Derleme konumunu içerir) içerisinden ``%buildroot``a taşıyan (paketlenecek dizin yapısını barındıran dizin) komut veya komutları içerir. Bu işlem çoğu zaman dosyaları ``~/rpmbuild/BUILD`` konumundan ``~/rpmbuild/BUILDROOT``'a taşımak anlamına gelir. Bu komutlar son kullanıcı paketi kurarken değil, yalnızca paket inşa edilirken çalıştırılır. Daha fazla bilgi için xref:spec-dosyalari-ile-calismak[] kısmını inceleyin.
 | ``%check``       | Yazılımı denetlemek için kullanılan komut ya da komutları içerir. Bu kısım çoğu zaman birim testlerinden oluşur. 
-| ``%files``       | Bu kısımda listenen dosyalar paketi kuran son kullanıcının sistemine yerleştirilir. 
-| ``%changelog``   | Paketin ``Version`` ve ``Release`` numaraları değiştiğinde ne değiştiğini bildirmek için kullanılır. 
+| ``%files``       | Bu kısımda listelenen dosyalar paketi kuran son kullanıcının sistemine yerleştirilir. 
+| ``%changelog``   | Paketin ``Version`` ve ``Release`` numaraları değiştiğinde,neyin değiştiğini bildirmek için kullanılır. 
 |====
 
 [[ileri-duzey-maddeler]]
 ==== İleri Düzey Maddeler
 
-Aynı zamanda, SPEC dosyaları ileri düzey maddeleri de içerebilir. Örneğin, bir SPEC dosyası __betikçi__ ve __tetikleyici__leri içerebilir. Bu yöngergeler, son kullanıcı kendi sistemine kurarken farklı noktaları etkiler. (Paket inşa sürecini etkilemez) 
+SPEC dosyaları ileri düzey maddeleri de içerebilir. Örneğin, bir SPEC dosyası __betikçi__ ve __tetikleyici__leri içerebilir. Bu yöngergeler, son kullanıcı kendi sistemine kurarken farklı noktalarda tesir eder. (Paket inşa sürecini etkilemez) 
 
 Daha fazla bilgi için xref:tetikleyiciler-ve-betikciler[] kısmını okuyabilirsiniz. 
 
 [[buildroot]]
 === BuildRoot
 
-Ç.N: BuildRoot, Build (İnşa/Derleme) ve Root (Kök) kelimelerinden ortaya çıkan, motamot çevirisi ``DerlemeKökü`` olan bir kelime. Bu kelime daha önce karşılaştığımız ``Tarball`` ve şimdi denk geleceğimiz ``chroot`` gibi, literatür içerisinde yer edindiğinden çevirmek istemedim. Bu yüzden, yazı boyunca ``BuildRoot`` kelimesini kullanmaya devam edeceğim. Eğer bu kelimeye karşılık gelen iyi bir karşılık bulursanız bana bildirebilirsiniz. 
+Ç.N: BuildRoot, Build (İnşa/Derleme) ve Root (Kök) kelimelerinden ortaya çıkan, mot a mot çevirisi ``DerlemeKökü`` olan bir kelimedir. Daha önce karşılaştığımız ``Tarball`` ve şimdi denk geleceğimiz ``chroot`` gibi, literatür içerisinde yer edindiğinden çevirmek istemedim. Bu yüzden, yazı boyunca ``BuildRoot`` kelimesini kullanmaya devam edeceğim. Eğer bu kelimeye karşılık gelen iyi bir karşılık bulursanız bana bildirebilirsiniz. 
 
 RPM paketleme bağlamında, "buildroot" bir 
 ifdef::community[https://en.wikipedia.org/wiki/Chroot[chroot]]
-ifdef::rhel[chroot] ortamıdır. Bu ortam dosya sistemi içerisindeki derleme yapıları bu dizine yerleştirilir. Bu dizin, paketi kuracak tarafın sisteminin kök dizinini temsil eder. Bu yerleştirme düzeninin son kullanıcının Dosya Sistemi Hiyerarşisi standartlarına uygun olması şiddetle tavsiye edilir. 
+ifdef::rhel[chroot] ortamıdır. Bu ortam, dosya sistemi içerisindeki paketi kuracak tarafın sisteminin kök dizinini temsil eden derleme yapıları dizinine yerleştirir. Yerleştirme düzeni son kullanıcının __Dosya Sistemi Hiyerarşisi__ standartlarına uygun olmalıdır. 
 
-"Buildroot" içerisine eklenen dosyalar bir https://en.wikipedia.org/wiki/Cpio[cpio] arşivine dönüştürülür ki bu RPM'in temel parçasıdır. RPM paketi, son kullanıcının sistemine kurulduğu zaman bu dizindeki dosyalar hiyerarşiye uygun olarak kök dizin içerisine çıkartılır. 
+"Buildroot" içerisine eklenen dosyalar https://en.wikipedia.org/wiki/Cpio[cpio] arşivine dönüştürülür ki bu RPM'in temel parçasıdır. RPM paketi, son kullanıcının sistemine kurulduğu zaman dizindeki dosyalar hiyerarşiye uygun olarak kök dizin içerisine çıkartılır. 
 
 [NOTE]
 ====
@@ -180,13 +181,13 @@ ifdef::rhel[chroot] ortamıdır. Bu ortam dosya sistemi içerisindeki derleme ya
 [[rpm-makrolari]]
 === RPM Makroları
 
-Bir http://rpm.org/user_doc/macros.html[rpm makro]su, belirli gömülü işlevleri yerine getirmek için kullanılan ve koşula göre değişen değerleri tutan kısa bir yazıdır. Bu demek oluyor ki, bilmek zorunda olmadığınız şeyleri RPM'e havale edebilirsiniz.
+Bir http://rpm.org/user_doc/macros.html[rpm makro]su, belirli gömülü işlevleri yerine getirmek için kullanılan ve koşula göre değişen değerleri tutan net ifadesidir. Bu demek oluyor ki, bilmek zorunda olmadığınız şeyleri RPM'e havale edebilirsiniz.
 
-Mesela şöyle bir durum düşünelim; SPEC dosyasını hazırlarken yazılım sürümünü tekrar tekrar yazmak istemediğiniz zaman makrolar size yardımcı olur. Daha önce tanımladığınız __Version__ yönergesini, sonraları ``%{version}`` makrosunu kullanarak çağırabilirsiniz. Her ``%{version}`` makrosu, otomatik olarak __Version__ yöngersiyle yer değiştirecektir.
+SPEC dosyasını hazırlarken yazılım sürümünü tekrar tekrar yazmak istemediğinizde makrolar size yardımcı olur. Daha önce tanımladığınız __Version__ yönergesini, sonraları ``%{version}`` makrosunu kullanarak çağırabilirsiniz. Her ``%{version}`` makrosu, otomatik olarak __Version__ yönergesiyle yer değiştirecektir.
 
 [NOTE]
 ====
-Eğer bir makronun ne iş yaptığını çıkartamazsanız şu şekilde ne iş yaptığını çıkartabilirsiniz:
+Eğer makronun ne iş yaptığını anlayamazsanız şu şekilde ne iş yaptığını bulabilirsiniz:
 
 [source,bash]
 ----
@@ -207,7 +208,7 @@ $ rpm --eval %{_libexecdir}
 ----
 
 ====
-Yaygın olarak kullanılan bir makro, %{?dist} makrosudur. Bu makro, derleme esasında hangi dağıtımın kullanıldığına işaret eder. 
+%{?dist} makrosu derleme esasında hangi dağıtımın kullanıldığına işaret eder ve yaygın olarak kullanılır.
 
 Örnek kullanım:
 
@@ -240,9 +241,9 @@ Makrolar hakkında daha fazla bilgi almak için: xref:makrolar-hakkinda-daha-faz
 [[spec-dosyalari-ile-calismak]]
 === SPEC Dosyaları İle Çalışmak
 
-Yazılımları paketlemenin büyük bir kısmı SPEC dosyalarını düzenlemektir. Bu kısımda, SPEC dosyaları oluşturmak ve düzenlemek üzerine konuşacağız. 
+Yazılımları paketlemenin büyük kısmı SPEC dosyalarını düzenlemekten oluşur. Bu bölümde, SPEC dosyaları oluşturmak ve düzenlemek üzerine konuşacağız. 
 
-Yeni bir yazılımı paketlemek için yeni bir SPEC dosyası oluşturmanız gerekir. Bütün dosyayı en temelden oluşturmak yerine, ``rpmdev-newspec`` aracını kullanabilirsiniz. Bu araç size doldurulmamış bir SPEC dosyası hazırlar ve ihtiyacınıza göre yönetgeleri ve alanları kullanabilirsiniz. 
+Yeni bir yazılımı paketlemek için yeni bir SPEC dosyası oluşturmanız gerekir. Bütün dosyayı en temelden oluşturmak yerine, ``rpmdev-newspec`` aracını kullanabilirsiniz. Bu araç size doldurulmamış bir SPEC dosyası hazırlar ve ihtiyacınıza göre yönergeleri ve alanları kullanabilirsiniz. 
 
 Bu bölümde, daha önce xref:yazilimi-paketlemeye-hazirlamak[] kısmında gördüğümüz üç farklı Merhaba Dünya programını ele alacağız.  
 
@@ -256,8 +257,7 @@ Bu bölümde, daha önce xref:yazilimi-paketlemeye-hazirlamak[] kısmında görd
 
 Hepsini ``~/rpmbuild/SOURCES`` içine yerleştirin.
 
-Üç dosya için de bir SPEC dosyası hazırlayın.
-Create a SPEC file for each of the three programs:
+Üç dosya için de bir SPEC dosyası hazırlayın:
 
 NOTE: Bazı yazılımcı odaklı metin düzenleyicileri ``.spec`` dosyasını önceden hazırlayabilir. ``rpmdev-newspec`` aracı ise düzenleyiciden bağımsız bir yol sunar ki bu rehberde kullanmamızın nedeni budur.
 
@@ -277,12 +277,12 @@ pelaba.spec created; type minimal, rpm version >= 4.11.
 ----
 ``~/rpmbuild/SPECS/`` dizini artık üç farklı SPEC dosyasını içeriyor. Bunlar, ``belaba.spec``, ``celaba.spec`` ve ``pelaba.spec``'tir. 
 
-Dosyaları gözden geçirebilirsiniz. xref:spec-dosyasi-nedir[] kısmında gördüğünüz yönergeleri bu dosyalarda görebilirsiniz. Sonraki bölümlerde, bu SPEC dosyalarını kendiniz dolduracaksınız. 
+Dosyaları gözden geçirebilirsiniz. xref:spec-dosyasi-nedir[] kısmında gördüğünüz yönergeleri bu dosyalarda da göreceksiniz. Sonraki bölümlerde, bu SPEC dosyalarını kendiniz dolduracaksınız. 
 
 ifdef::community[]
 [NOTE]
 ====
-``rpmdev-newspec`` aracı herhangi bir dağıtıma özgü standartları ve eğilimleri göz önünde bulundurmaz. Fakat bu belge Fedora, CentOS ve RHEL'i hedeflediğinden şu detayları fark edebilirsiniz: 
+``rpmdev-newspec`` aracı herhangi bir dağıtıma özgü standartları ve eğilimleri göz önünde bulundurmaz. Fakat bu belge Fedora, CentOS ve RHEL'i hedeflediğinden bazı detayları fark edebilirsiniz: 
 
 * _CentOS_ (7.0'dan önceki sürümler) veyahut https://getfedora.org/[Fedora] (18'den önceki sürümler) üzerinde çalışırken ``rm $RPM_BUILD_ROOT`` komutuna denk gelebilirsiniz. Biz, diğer makrolarla tutarlılık sağlamak açısından ``%{buildroot}`` kullanmayı ``$RPM_BUILD_ROOT`` kullanmaya tercih ederiz. 
 
@@ -292,17 +292,17 @@ endif::community[]
 ifdef::rhel[]
 [NOTE]
 ====
-``rpmdev-newspec`` aracı herhangi bir dağıtıma özgü standartları ve eğilimleri göz önünde bulundurmaz. Fakat bu belge RHEL'i hedef alır, bundan dolayı ``$RPM_BUILD_ROOT`` yerine ``%{buildroot}`` kullandığımızı fark edebilirsiniz. Bunun amacı diğer makrolar ile tutarlılık sağlamaktır. 
+``rpmdev-newspec`` aracı herhangi bir dağıtıma özgü standartları ve eğilimleri göz önünde bulundurmaz. Fakat bu belge RHEL'i hedef alır, bundan dolayı ``$RPM_BUILD_ROOT`` yerine ``%{buildroot}`` kullandığımızı fark edeceksiniz. Bunun amacı diğer makrolar ile tutarlılık sağlamaktır. 
 
 ====
 endif::rhel[]
 
-Üç paketlenecek olan üç yazılımın özetilerini aşağıda görebilirsiniz. Her birisi detaylıca tarif edilmiştir. Paketleme için gereken ihtiyacınıza göre özetleyebilir ya da farklı paketleme yöntemlerini keşfetmek için hepsini birden okuyabilirsiniz. 
+Paketlenecek olan üç yazılımın özetleri aşağıda mevcuttur. Her biri detaylıca tarif edilmiştir. Paketleme için isterseniz sadece ihtiyacınıza özel hitap edenlere bakabilirsiniz veya farklı paketleme yöntemleri keşfetmek için hepsini birden okuyabilirsiniz. 
 
 [cols="15%,85%"]
 |====
 | Yazılım Adı    | Açıklama
-| belaba         | Ham olarak yorumlanan bir programlama dilinde yazılmış bir yazılım. Kaynak kodunun derlenmeye ihtiyacı olmadığı, yalnızca kurulmayı ihtiyaç olduğu bir durumda ne yapılması gerektiğine örnektir. Eğer önceden derlenmiş ikili bir paketin kurulması gerekiyorsa, ikili dosyalar yalnızca bir dosya olduğu için bu kısma göz atabilirsiniz.  inceleyebilirsiniz. 
+| belaba         | Ham olarak yorumlanan bir programlama dilinde yazılmış bir yazılım. Kaynak kodunun derlenmeye ihtiyacı olmadığı, yalnızca kurulmayı ihtiyaç olduğu bir durumda ne yapılması gerektiğine örnektir. Eğer önceden derlenmiş ikili bir paketin kurulması gerekiyorsa, ikili dosyalar yalnızca bir dosya olduğu için bu kısma göz atabilirsiniz. 
 | pelaba         | Bayt derlenen ve yorumlanan bir programlama dilinde yazılmış bir yazılım. Bayt derlenen kaynak kodunun nasıl derlenmesi ve kurulması gerektiğine örnektir. 
 | celaba         | Yerel olarak derlenen bir programlama dilinde yazılmış bir yazılım. Kaynak kodundan makine koduna programın nasıl derlenmesi gerektiğine ve çıktı olarak gelen çalıştırılabilir dosyaların nasıl kurulması gerektiğine örnektir. 
 |====
@@ -312,11 +312,11 @@ endif::rhel[]
 
 İlk SPEC dosyamız, xref:yazilimi-paketlemeye-hazirlamak[] kısmında daha önce karşılaştığımız, bash kabuk betiği ile yazılmış olan belaba. 
 
-Şunları yaptığınızdan emin olun. 
+Şunları yaptığınızdan emin olun:
 
 . ``belaba`` kaynak kodunu ``~/rpmbuild/SOURCES/`` kısmına yerleştirdiğinize dikkat edin. Bilgi için: xref:spec-dosyalari-ile-calismak[].
 
-. Doldurulmamış SPEC dosyasını ``~/rpmbuild/SPECS/belaba.spec`` konumunda olduğuna emin olun. Bu dosyanın içerisinde şunlar olmalı:
+. Doldurulmamış SPEC dosyasını ``~/rpmbuild/SPECS/belaba.spec`` konumunda olduğuna emin olun. Bu dosyanın içerisinde olması gerekenler:
 
 +
 [source,specfile]
@@ -363,7 +363,7 @@ rm -rf $RPM_BUILD_ROOT
 +
 * ``Version`` yönergesi yazılımının sürümünü belirtmelidir. Sevimli kaynak kodumuz ``belaba`` için bu, ``0.1``.
 +
-* ``Release``, otomatik olarak ilk değer olan ``1{%dist}`` olarak ayarlandı. Eğer yazılımın sürümünde bir değişiklik olmadan yeni bir güncelleme olursa, mesela ki yeni bir yama, bu sayı tek tek arttırılmalıdır. Yeni sürümlerde ``Release`` rakamı tekrar ``1`` olmalıdır. Örneğin eğer belaba'nın ``0.2`` sürümü yayınlanırsa, ``Release`` tekrardan ``1{%dist} olarak ayarlanmalıdır. _disttag_ makrosu ise xref:rpm-makrolari[] kısmında detaylıca anlatılmıştır. 
+* ``Release``, otomatik olarak ilk değer olan ``1{%dist}`` olarak ayarlandı. Eğer yazılımın sürümünde bir değişiklik olmadan yeni bir güncelleme olursa, mesela yeni bir yama, bu sayı tek tek arttırılmalıdır. Yeni sürümlerde ``Release`` rakamı tekrar ``1`` olmalıdır. Örneğin eğer belaba'nın ``0.2`` sürümü yayınlanırsa, ``Release`` tekrardan ``1{%dist} olarak ayarlanmalıdır. _disttag_ makrosu ise xref:rpm-makrolari[] kısmında detaylıca anlatılmıştır. 
 +
 * ``Summary``, yazılımın ne olduğu anlatan tek satırlık, kısa bir açıklamadır. 
 +
@@ -392,12 +392,12 @@ endif::community[]
 +
 Biz örnek olması için ``GPLv3+`` kullanacağız. 
 +
-* ``URL`` bölümü, yazılımın yayınlandığı İnternet adresine adresini gösterir. Örneğin: ``https:://example.com/belaba``. Yine de tutarlılık olması açısından, %{name} makrosunu tercih edin ve ``https://example.com/%{name}`` şeklinde kullanın.
+* ``URL`` bölümü, yazılımın yayınlandığı internet adresini gösterir. Örneğin: ``https:://example.com/belaba``. Yine de tutarlı olması açısından, %{name} makrosunu tercih edin ve ``https://example.com/%{name}`` şeklinde kullanın.
 +
-* ``Source0`` yöngergesi, kaynak kodunun yayınlandığı İnternet adresini içerir. Doğrudan paketlenecek yazılımın indirilmek için yayınlandığı adresi içermelidir. Bu örnekte, temsilen ``https://example.com/belaba/releases/belaba-0.1.tar.gz`` adresini kullanacağız. Elbette ki %{name} makrosunu da kullanacağız. Ayrıca, %{version} makrosunu da sürüm değişikliklerine uyum sağlamak için kullacağız. Sonuç olarak girdimiz şu şekli alacaktır:
+* ``Source0`` yöngergesi, kaynak kodunun yayınlandığı internet adresini içerir. Doğrudan paketlenecek yazılımın indirilmek için yayınlandığı adresi içermelidir. Bu örnekte, temsilen ``https://example.com/belaba/releases/belaba-0.1.tar.gz`` adresini kullanacağız. Elbette ki %{name} makrosunu da kullanacağız. Ayrıca, %{version} makrosunu da sürüm değişikliklerine uyum sağlamak için kullacağız. Sonuç olarak girdimiz şu şekli alacaktır:
 ``https://example.com/%{name}/releases/%{name}-%{version}.tar.gz``
 +
-Değişikliklerinizden sonra, SPEC dosyasının ilk kısmı şu şekilde görünmelidir:
+Değişikliklerinizden sonra, SPEC dosyasının ilk kısmı aşağıdaki gibi görünmelidir:
 +
 [source,specfile]
 ----
@@ -412,15 +412,15 @@ Source0:        https://example.com/%{name}/release/%{name}-%{version}.tar.gz
 
 ----
 +
-. ``BuildRequires`` ve ``Requires`` yönergelerini doldurmak ve ``BuildArch`` yönergesini eklemek:
+. ``BuildRequires`` ve ``Requires`` yönergelerini doldurun ve ``BuildArch`` yönergesini ekleyin:
 +
 * ``BuildRequires``, paket için derleme zamanı bağımlılıklarını belirtir. ``belaba``'nın derlenmesi için hiçbir adıma gerek yoktur, çünkü Bash ham hâlde yorumlanan bir programlama dilidir ve yalnızca dosyaların sisteme kurulması yeterlidir. Yapılacak tek şey, bu yönergeyi silmektir. 
 +
 * ``Requires`` ise paketlenmiş programın çalışması için gereken bağımlılıkları belirtir. ``belaba`` betiği için gereken tek bağımlılık, çalıştırılması için gereken ``bash`` kabuk ortamıdır. Bu yüzden, bu yönergeye ``bash`` yazarak bunu belirteceğiz.  
 +
-* Bu program yorumlanan bir dilde yazıldığından dolayı mimari açısından herhangi bir bağlantı gerektirmeyecektir. ``BuildArch`` direktifini ekleyip buna ``noarch`` değeri vereceğiz. Bu değer, RPM paketinin herhangi bir işlemci mimarisi üzerinde çalışabileceğini belirtecektir. 
+* Program yorumlanan bir dilde yazıldığından dolayı mimari açıdan herhangi bir bağlantı gerektirmeyecektir. ``BuildArch`` direktifini ekleyip buna ``noarch`` değeri vereceğiz. Bu değer, RPM paketinin herhangi bir işlemci mimarisi üzerinde çalışabileceğini belirtecektir. 
 +
-Değişikliklerinizden sonra, SPEC doyasının ilk kısmı şu şekilde görünmelidir:
+Değişikliklerinizden sonra, SPEC dosyasının ilk kısmı şu şekilde görünmelidir:
 +
 [source,specfile]
 ----
@@ -446,12 +446,12 @@ BuildArch:      noarch
 +
 * ``%build`` kısmı ise, paketlediğimiz yazılımın nasıl derlenmesi gerektiğini belirtir. ``bash`` diliyle yazılan dosyaların derlenmeye ihtiyacı olmadığı için, basitçe bu kısmı silip boş bırakacağız. 
 +
-* ``%install`` kısmı ise ``rpmbuild``'in dosyaları nasıl kurması gerektiğini bildiren yönergeleri içerir. Bu dizinde inşa edilen dosyalar ``BUILDROOT`` dizinine eklenir. Bu dizin, bir 
+* ``%install`` kısmı ise ``rpmbuild``'in dosyaları nasıl kurması gerektiğini bildiren yönergeleri içerir. Bu dizinde inşa edilen dosyalar ``BUILDROOT`` dizinine eklenir. Bu dizin,
 ifdef::community[https://en.wikipedia.org/wiki/Chroot[chroot]]
 ifdef::rhel[chroot]
 temel dizinidir ve paketi kuran tarafın kök dizinini temsil eder. Burada, kurduğumuz dosyaların dizinlerini oluşturmamız gerekir. 
 +
-``belaba`` için yalnızca hedef dizini kurmamız ve ``bash`` betiğini yerleştirmemiz gerektiği için ``install`` komutunu kullanacağız. RPM makroları bu işe kolay yoldan yapmamız için yardımcı olacaktır. . 
+``belaba`` için yalnızca hedef dizini kurmamız ve ``bash`` betiğini yerleştirmemiz gerektiği için ``install`` komutunu kullanacağız. RPM makroları bu işi kolay yoldan yapmamız için yardımcı olacaktır. . 
 
 +
 ``%install`` kısmı düzenlemeleri bitirdikten sonra şöyle görünecektir: 
@@ -466,13 +466,13 @@ install -m 0755 %{name} %{buildroot}/%{_bindir}/%{name}
 
 ----
 +
-* ``%files`` kısmı, paketinizin son kullanıcının sistemine yerleştireceği dosyaların tam konumunu belirtir. Yalnızca ``belaba`` dosyasını kuracağımız için, konumumuz ``/usr/bin/belaba``'dır ki bunu RPM Makroları ile ``%{_bindir}/%{name} olarak kısaltabiliriz. 
+* paketinizin ``%files`` kısmı,  son kullanıcının sistemine yerleştireceği dosyaların tam konumunu belirtir. Yalnızca ``belaba`` dosyasını kuracağımız için, konumumuz ``/usr/bin/belaba``'dır ki bunu RPM Makroları ile ``%{_bindir}/%{name} olarak kısaltabiliriz. 
 
 +
 * Aynı zamanda, gömülü makrolar aracılığıyla dosyaların ne gibi görevleri olduğunu belirtebilirsiniz.
 Örneğin LICENSE dosyasının yazılım lisansı olduğunu belirtmek için %license makrosunu kullanabilirsiniz.
-Bu, ``rpm`` komutu aracılığıyla paketin üstveriyi sorgulandığında kolaylık sağlar. 
-+
+Bu,``rpm`` komutunu aracılığıyla üstveriyi belirten paket dosyalarını sorgularken kolaylık sağlar. 
++o
 Değişikliklerinizden sonra, %files kısmı şu şekilde görünecektir:
 +
 [source,specfile]
@@ -483,7 +483,7 @@ Değişikliklerinizden sonra, %files kısmı şu şekilde görünecektir:
 
 ----
 +
-. Son kısım olan ``%changelog`` kısmı, her Sürüm-Yayın değişikliği için tarif damgalı girdileri listeler. Bu günlük, paketleme değişikliklerini içerir, yazılım değişikliğini değil. Mesela, paketleme değişiklikleri için örnekler: yama ekleme, inşa sürecini değiştirme vs.
+. Son kısım olan ``%changelog``, her Sürüm-Yayın değişikliği için tarif damgalı girdileri listeler. Bu günlük, paketleme değişikliklerini içerir, yazılım değişikliğini değil. Paketleme değişiklikleri için örnekler: yama ekleme, inşa sürecini değiştirme vs.
 
 Ç.N: ``%changelog`` içerisindeki değişiklikleri ve tarih damgasını İngilizce yazmanız paketi inceleyecek yabancı kullanıcılar için kolaylık sağlayacaktır. 
 
@@ -511,7 +511,7 @@ Tarih damgalanmış örnek bir girdi:
 
 ----
 
-Ve, **belaba** için bütün SPEC dosyasını yazmış bulunmaktasınız. **belaba** için yazmış olduğunuz dosya buna benzemelidir:
+Sonunda **belaba** için bütün SPEC dosyasını yazmış bulunmaktasınız. **belaba** için yazmış olduğunuz dosya buna benzemelidir:
 
 
 [source,specfile]
@@ -558,7 +558,7 @@ install -m 0755 %{name} %{buildroot}/%{_bindir}/%{name}
 
 ----
 
-Sonraki kısım, nasıl RPM derlenmesi gerektiğini içerir.
+Sonraki kısım, RPM'nin nasıl derlenmesi gerektiği hakkında bilgi verir.
 
 [[spec-dosyalari-ile-calisma-pelaba]]
 ==== pelaba
@@ -568,13 +568,13 @@ Hazırlayacağımız ikinci SPEC dosyası, https://www.python.org/[Python] ile h
 Bu düzenlemeye girişmeden önce, bayt derlenerek yorumlanan dillere dair önemli bir detaydan bahsetmemiz gerekiyor. Yazılımı bayt-derlediğimiz için 
 ifdef::community[https://en.wikipedia.org/wiki/Shebang_%28Unix%29[mevzu (shebang)]]
 ifdef::rhel[mevzu (shebang)]
-olarak isimlendirilen yapıyı kullanamıyoruz. Bu yapı, bayt derlenmeyen kabul betikleri ve https://www.python.org/[Python] gibi dillerin ufak çaplı kodları için yaygın olarak tercih edilen bir yoldur. Bizim tek satırlık kodumuz için bayt derleme işi anlamsız görünebilir, fakat yüzlerce koddan oluşan büyük çaptaki yazılım projeleri için bu iş performans açısından oldukça faydalıdır. 
+olarak isimlendirilen yapıyı kullanamıyoruz. Bu yapı, bayt derlenmeyen kabuk betikleri ve https://www.python.org/[Python] gibi dillerin ufak çaplı kodları için yaygın olarak tercih edilen bir yoldur. Bizim tek satırlık kodumuz için bayt derleme işi anlamsız görünebilir, fakat yüzlerce koddan oluşan büyük çaptaki yazılım projeleri için performans açısından oldukça faydalıdır. 
 
-NOTE: Bayt derlenmiş kodu çağıran betiği hazırlamak veyahut yazılıma bayt derlenmemiş koda giriş noktası oluşturmak, yazılımcıların paketi yayına çıkartmadan önce sıklıkla yaptıkları iştir. Ancak kimi durumlarda böyle bir giriş noktası hazırlanmamış olabilir ve bu alıştırma bu tarz durumlarda ne yapmanız gerektiğini gösterir. https://www.python.org/[Python] kodunun normalde nasıl yayınlandığını ve dağıtıldığını öğrenmek istiyorsanız lütfen https://docs.python.org/3/library/distribution.html[Yazılım Paketleme ve Dağıtma] belgelerini inceleyiniz. 
+NOTE: Bayt derlenmiş kodu çağıran betiği hazırlamak veyahut yazılıma bayt derlenmemiş koda giriş noktası oluşturmak, yazılımcıların paketi yayına çıkartmadan önce sıklıkla yaptıkları iştir. Ancak her zaman böyle bir giriş noktası hazırlanmamış olabilir ve yapacağımız alıştırma bunun gibi durumlarda ne yapmanız gerektiğini gösterir. https://www.python.org/[Python] kodunun normalde nasıl yayınlandığını ve dağıtıldığını öğrenmek istiyorsanız lütfen https://docs.python.org/3/library/distribution.html[Yazılım Paketleme ve Dağıtma] belgelerini inceleyiniz. 
 
-Bayt derlenmiş yazılıma bir giriş noktası hazırlamak için ufak bir kabuk betiği hazırlayacağız ve bu betiği SPEC dosyasının içerisine dâhil ekleyeceğiz. Aynı zamanda bu SPEC dosyası içerisinde nasıl betik kabuğu kodlarını çalıştırdığımıza dair bir örnek olmuş olacak. Bu işin nasıl yapılacağına dair detayları ``%install`` kısmında inceleyeceğiz. 
+Bayt derlenmiş yazılıma bir giriş noktası hazırlamak için ufak bir kabuk betiği hazırlayacağız ve SPEC dosyasının içine dâhil ekleyeceğiz. Bu, aynı zamanda SPEC dosyası içinde nasıl betik kabuğu kodlarını çalıştırdığımıza dair bir örnek olmuş olacak. Daha sonra bunun nasıl yapılacağına dair detayları ``%install`` kısmında inceleyeceğiz. 
 
-Hadi bir adım ileri çıkalım ve ``~/rpmbuild/SPECS/pelaba.spec`` dosyasını incelemek üzere açalım. 
+Şimdi işi biraz daha ilerletelim ve ``~/rpmbuild/SPECS/pelaba.spec`` dosyasını incelemek üzere açalım. 
 
 Aşağıdaki örnek dosya ``rpmdev-newspec`` komutunun bize verdiği şablondur. 
 
@@ -615,16 +615,16 @@ rm -rf $RPM_BUILD_ROOT
 
 ----
 
-Tıpkı ilk örnek örnekte olduğu gibi, belgenin en tepesinde yer alan ``Name``,
+Tıpkı ilk örnekte olduğu gibi, belgenin en tepesinde yer alan ``Name``,
 ``Version``, ``Release``, ``Summary`` yönergeleriyle düzenlemeye başlayalım. ``rpmdev-newspec`` komutu gerekli bilgiyi önceden sağladığı için ``Name`` yönergesi önceden belirtilmiş oldu. 
 
 İlk iş, ``Version`` yönergesini __pelaba__'nın sürüm numarasına eşleştirmek olsun. Bu yazılım numarası, indirdiğimiz kod için (veya xref:yazilimi-paketlemeye-hazirlamak[] kısmında gördüğümüz üzere) ``0.1.1``'dir. 
 
-``Release`` hâlihazırda bizim için ``1%{?dist}`` olarak ayarlandı. Ayarlanmış değerin içindeki ``1`` sayısı paket her düzenlendiğinde bir arttırılmak zorundadır, ki bu düzenlemeler bir sorunun düzeltilmesi için yama eklemek olabilir. Fakat yeni bir ``Version`` yayınlandığında bu sayı tekrar ``1``'e geri çekilmelidir. xref:rpm-makrolari[] bölümünü okuyanlar ``%{?dist}`` ile gösterilen __disttag__ makrosunu hemen tanımış olmalıdır.
+``Release`` hâlihazırda bizim için ``1%{?dist}`` olarak ayarlandı. Ayarlanmış değerin içindeki ``1`` sayısı paket her düzenlendiğinde bir arttırılmak zorundadır, ki bu düzenlemeler bir sorunun düzeltilmesi için yama eklemek olabilir. Fakat yeni bir ``Version`` yayınlandığında bu sayı tekrar ``1``'e geri çekilmelidir. xref:rpm-makrolari[] bölümünü okuyanlar ``%{?dist}`` ile gösterilen __disttag__ makrosunu hemen tanımış olmalılar.
 
 ``Summary``, yazılımın ne olduğunu açıklayan kısa, tek satırlık bir yönergedir. 
 
-SPEC dosyasının ilk kısmında yaptığımız değişikliklerden sonra bu kısım şuna benzemelidir:
+SPEC dosyasının ilk kısmında yaptığımız değişikliklerden sonra bu kısım aşağıdakine benzemelidir:
 
 [source,specfile]
 ----
@@ -635,25 +635,25 @@ Summary:        Python ile Yazılmış Bir Merhaba Dünya örneği
 
 ----
 
-Şimdi, ``rpmdev-newspec`` komutunun ``License``, ``URL``, ``Source0`` şeklinde grupladığı ikinci kısma bakalım. 
+Şimdi, ``rpmdev-newspec`` komutunun ``License``, ``URL``, ``Source0`` şeklinde gruplandığı ikinci kısma bakalım. 
 
 ifdef::community[]
 ``License`` kısmı, yazılımcının kaynak kodu için belirttiği 
 ifdef::community[https://tr.wikipedia.org/wiki/Yazılım_lisansı[yazılım lisansıdır]]
 ifdef::rhel[yazılım lisansıdır.]
-. SPEC dosyasında kullanılan olan lisans etiketleri RPM tabanlı https://tr.wikipedia.org/wiki/Linux dağıtımları için farklılık gösterir. Biz, https://fedoraproject.org/wiki/Licensing:Main[Fedora Lisanslama Rehberi] için geçerli olan yazım standartlarını kullanacağız ve bu programımız için örnek olarak seçtiğimiz tarz ``GPLv3+``'dır.
+. SPEC dosyasında kullanılan olan lisans etiketleri RPM tabanlı https://tr.wikipedia.org/wiki/Linux dağıtımları için farklılık gösterir. Biz, https://fedoraproject.org/wiki/Licensing:Main[Fedora Lisanslama Rehberi] için geçerli olan yazım standartlarını kullanacağız. Programımız için örnek olarak seçtiğimiz tarz ``GPLv3+``'dır.
 endif::community[]
 
 ifdef::rhel[]
 ``Licence`` kısmı, kaynak kodunda belirtilmiş yazılım lisansıdır. SPEC dosyasında kullanılan yazım tarzı çeşitli RPM tabanlı Linux dağıtımları için farklılık gösterir. 
 endif::rhel[]
 
-``URL`` yönergesi, yazılımın anasayfasına giden bağlantıyı içerir. Bu bağlantı, kaynak koda giden bağlantıyı değil ürünün, projenin veyahut şirketin ana sayfasına giden bağlantı olmalı ve bu bağlantıdan yazılımın ilgili parçası hakkında daha fazla bilgiye ulaşılmalıdır. Şimdilik örnek olması açısından ``https://example.com/pelaba`` adresini seçiyoruz. Ancak, SPEC dosyasının diğer parçaları arasında tutarlılık olması için adresteki yazılım ismini ``%{name}`` RPM makrosu ile değiştireceğiz. 
+``URL`` yönergesi kaynak kodun indirme linki değil, yazılımın anasayfasına giden bağlantıdır. İçeriğinde, yayındaki yazılım hakkında daha fazla bilgi sahibi olmak isteyenler için ürünün, projenin veyahut şirketin anasayfasına giden bağlantı olmalıdır. Şimdilik örnek olması açısından ``https://example.com/pelaba`` adresini seçiyoruz. Ancak, SPEC dosyasının diğer parçaları arasında tutarlılık olması için adresteki yazılım ismini ``%{name}`` RPM makrosu ile değiştireceğiz. 
 
-``Source0`` kaynak kodu yazılım kodunun indirilebileceği adresi işaret eder. Bu bağlantı, paketlenecek olan kaynak kodun ilgili sürümüne yönlendirmelidir. Aynı şekilde, bu yalnızca bir örnek olduğu için şöyle bir örnek kullanacağız:
+``Source0`` kaynak kodu yazılım kodunun indirilebileceği adresi işaret eder. Bağlantı, paketlenecek olan kaynak kodun ilgili sürümüne yönlendirmelidir. Aynı şekilde, bu yalnızca bir örnek olduğu için aşağıdaki linki kullanacağız:
 ``https://example.com/pelaba/releases/pelaba-0.1.1.tar.gz``
 
-Bahsedilmelidir ki, tamamen sabit bir şekilde belirtilmiş bir bağlantı ileride yayınlanacak olan sürümler sıkıntı yaratacaktır ve adresteki ``0.1.1`` kısmı muhakkak değişecektir. Bir SPEC dosyası yalnızca tek bir sürüm için hazırlanmaz, yeni sürümlerde de olabilecek en az değişiklikle tekrar kullanılır. Bu yüzden, kodu hazırlarken adres sabit olarak değil ``https://example.com/%{name}/releases/%{name}-%{version}.tar.gz`` biçimiyle yazılır. 
+Tamamen sabit bir şekilde belirtilmiş bir bağlantı ileride yayınlanacak olan sürümler için sıkıntı yaratacaktır, bu yüzden adresteki ``0.1.1`` kısmı muhakkak değişecektir. SPEC dosyası yalnızca tek bir sürüm için hazırlanmaz, yeni sürümlerde de olabilecek en az değişiklikle tekrar kullanılır. Bu yüzden, kodu hazırlarken adres sabit olarak değil ``https://example.com/%{name}/releases/%{name}-%{version}.tar.gz`` biçimiyle yazılır. 
 
 Değişikliklerin ardından, SPEC dosyanızın üst tarafı şuna benzemelidir:
 
@@ -670,9 +670,9 @@ Source0:        https://www.example.com/%{name}/releases/%{name}-%{version}.tar.
 
 ----
 
-Ardından, ``BuildRequires`` ve ``Requires`` isimli iki yönergeyi ele alacağız, bu iki yönerge de paketin bağımlılıklarının belirler. Fakat, ``BuildRequires`` paketin **inşa edilmesi** için gereken bağımlılıkları gösterirken ``Requires`` paketin düzgünce **çalışması** için gerekli olan bağımlılıklara işaret eder.
+Ardından, ``BuildRequires`` ve ``Requires`` isimli iki yönergeyi ele alacağız, bu iki yönerge de paketin bağımlılıklarını belirler. Fakat, ``BuildRequires`` paketin **inşa edilmesi** için gereken bağımlılıkları gösterirken ``Requires`` paketin düzgünce **çalışması** için gerekli olan bağımlılıklara işaret eder.
 
-Bu örnekte, kaynak kodunu bayt olarak derlemek üzere ``python`` paketine ihtiyacımız var. Aynı zamanda bayt-derlenmiş kodu çalıştırmak için ``python`` paketine ihtiyacımız var ve bunu belirtmek ``Requires`` direktifini kullanacağız. Aynı şekilde, paketimize hazırlayacağımız ufak bir giriş betiğini çalıştırmak için ``bash`` paketine de ihtiyacımız var.
+Örneğimizde, hem kaynak kodunu bayt olarak derlemek hem de bayt-derlenmiş kodu çalıştırmak için ``python`` paketine ihtiyacımız var. Bunu belirtmek için ``Requires`` direktifini kullanacağız. Aynı şekilde, paketimize hazırlayacağımız ufak bir giriş betiği çalıştırmak için ``bash`` paketine de ihtiyacımız var.
 
 Eklememiz gereken bir diğer şey ise, yorumlanan bir programlama dili üzerinde çalıştığımız için ``BuildArch`` direktifini ``noarch`` olarak belirtmemiz gerekiyor, böylece RPM bu paketin bir işlemci mimarisine bağımlı olmadığını anlamış olacak. 
 
@@ -696,15 +696,15 @@ Requires:       bash
 BuildArch:      noarch
 ----
 
-Bundan sonraki yönergeler, "gövde başlıklar" olarak düşünülebilir. Çünkü bu yönergeler birden çok satırı, talimatı ve betiklendirilmiş görevleri kapsamakta. Bu yönergeleri de yine daha önceki yönergelerimizi nasıl düzenliyorsak aynı şekilde düzenleyeceğiz. 
+Bundan sonraki yönergeler, "gövde başlıklar" olarak düşünülebilir. Çünkü bu yönergeler birden çok satırı, talimatı ve betiklendirilmiş görevleri kapsamakta. Bu yönergeleri de daha önce yaptıklarımızla aynı şekilde düzenleyeceğiz. 
 
-``%description``, ``Summary`` yönergesine kıyasla paketlenecek yazılım hakkında çok daha uzun bir açıklamayı içerir. Bu örneğimizde çok uzun bir tanıtım yazısı yazmayacağız, ancak bu kısım dilenirse tüm bir paragrafı ya da paragrafları kapsayabilir. 
+``%description``, ``Summary`` yönergesine kıyasla paketlenecek yazılım hakkında çok daha uzun bir açıklamayı içerir. Örneğimizde çok uzun bir tanıtım yazısı yazmayacağız, ancak bu kısım dilenirse tüm bir paragrafı ya da paragrafları kapsayabilir. 
 
-``%prep``, "Hazırlamak" kelimesinin İngilize karşılığı olan __prepare__ kelimesinin kısaltmasıdır. Yazılımı derlemek için gerekli olan ortamı veya çalışma alanını inşa etmek için kullanılır. Çoğu zaman bu işler; sıkıştırılmış arşivlerin açılması, yamaların uygulanması ve kaynak kodu içerisindeki bilgiyi SPEC dosyasının sonraki bölümlerinde okunması üzerine okumaktır. Bu bölümde kısaca işimizi görmek üzere ``%setup -q`` makrosunu kullanacağız. 
+``%prep``, "Hazırlamak" kelimesinin İngilize karşılığı olan __prepare__ kelimesinin kısaltmasıdır. Yazılımı derlemek için gerekli olan ortamı veya çalışma alanını inşa etmek için kullanılır. Çoğu zaman burada olan şey; arşivlerin açılması, yamaların uygulanması ve kaynak kodda gerekebilecek bilginin taranmasıdır ki bu bilgiler SPEC dosyasının sonraki bölümlerinde kullanılacaktır. Bu bölümde kısa yoldan işimizi göreceğinden ``%setup -q`` makrosunu kullanacağız. 
 
 ``%build``, paketlerin derlenmesi için ne yapılması gerektiğini içerir. Örneğimizde kaynak kodunun nasıl derlenmesi gerektiğine dair komutları uygulayacağız. xref:yazilimi-paketlemeye-hazirlamak[] kısmını okumuş okuyucular bu kodu tanıyacaktır. 
 
-SPEC dosyamızdaki ``%build`` kısmı şuna benzemelidir: 
+SPEC dosyamızdaki ``%build`` kısmı aşağıdakine benzemelidir: 
 
 [source,specfile]
 ----
@@ -714,21 +714,21 @@ python -m compileall pelaba.py
 
 ----
 
-``%install`` kısmı ise ``rpmbuild``'in dosyaları nasıl kurması gerektiğini bildiren yönergeleri içerir. Bu dizinde inşa edilen dosyalar ``BUILDROOT`` dizinine eklenir. Bu dizin, bir 
+``%install`` kısmı ise ``rpmbuild``'in dosyaları nasıl kurması gerektiğini bildiren yönergeleri içerir. Bu dizinde inşa edilen dosyalar ``BUILDROOT`` dizinine eklenir. Bu dizin, 
 ifdef::community[https://en.wikipedia.org/wiki/Chroot[chroot]]
 ifdef::rhel[chroot]
-temel dizinidir ve paketi kuran tarafın kök dizinini temsil eder. Burada, kurduğumuz dosyaların dizinlerini oluşturmamız gerekir. Aynı şekilde, RPM Makroları burada yapılan işleri sabit bir şekilde kodlamadan yapmamıza yardımcı olur. 
+temel dizinidir ve paketi kuran tarafın kök dizinini temsil eder. Burada, kurduğumuz dosyaların dizinlerini oluşturmamız gerekir. Ancak, RPM Makroları burada yapılan işleri sabit bir şekilde kodlamadan yapmamıza yardımcı olur. 
 
 Daha önce, dosyanın 
 ifdef::community[https://en.wikipedia.org/wiki/Shebang_%28Unix%29[mevzu]]
 ifdef::rhel[shebang]
-isimli kısmını kaybettiğimizi söylemiştik, bundan dolayı bayt derlenmiş kodumuz için aynı işi yapan bir betik hazırlamamız gerekmekte. Bunu yapmak için çok fazla yolumuz var, bunlardan birisi bir betik hazırlayıp ayrı bir ``SourceX`` yönergesiyle bunu belirtmek ve  bu örnekte tercih edeceğimiz şekilde SPEC dosyası içerisinde bir dosya oluşturmaktır. Bu örneği tercih etmemizin sebebi SPEC dosyasının da betik yazılabilir bir dosya olduğunu göstermektir. Yapacağımız şey, https://www.python.org/[Python] bayt-derlenmiş kodunu 
+isimli kısmını kaybettiğimizi söylemiştik, bundan dolayı bayt derlenmiş kodumuz için aynı işi yapan bir betik hazırlamamız gerekiyor. Bunu yapmak için birçok seçeneğimizden biri de bir betik hazırlayıp ayrı bir ``SourceX`` yönergesiyle bunu belirtmek ve  bu örnekte tercih edeceğimiz şekilde SPEC dosyası içerisinde bir dosya oluşturmaktır. Bu örneği tercih etmemizin sebebi SPEC dosyasının da betik yazılabilir bir dosya olduğunu göstermektir. Yapacağımız şey, https://www.python.org/[Python] bayt-derlenmiş kodunu 
 ifdef::community[https://en.wikipedia.org/wiki/Here_document["here" belgesi]]
 ifdef::rhel["here" document]
 ile çalıştırmak. Aynı zamanda bayt-derlenmiş dosyayı bir sistemin erişebileceği bir kütüphane dizinine kurmamız gerekmektedir. 
 
 
-NOTE: Fark ettiğiniz üzere burada kütüphane adresini elle belirtiyoruz. Bu durumdan kaçınmanın bir çok yolu var ve bunların ciddi bir kısmı <<gelismis-konular>> altındaki xref:makrolar-hakkinda-daha-fazlasi[] kısmında bahsediliyor, paketlenen yazılımın yazıldığı programlama diline uygun olarak. Bu örnekte çok fazla kafa karıştırmamak üzere kütüphane adresini elle yazmayı tercih ediyoruz. 
+NOTE: Fark ettiğiniz üzere burada kütüphane adresini elle belirtiyoruz. Bu durumdan kaçınmanın pek çok yolu var ve bunların önemli bir kısmı paketlenen yazılımın yazıldığı programlama diline uygun olarak <<gelismis-konular>> altındaki xref:makrolar-hakkinda-daha-fazlasi[] kısmında bahsediliyor. Bu örnekte kafa karışıklığı yaratmamak için kütüphane adresini elle yazmayı tercih ediyoruz. 
 
 ``%install`` kısmı düzenlemelerin ardından şu şekilde görünmelidir:
 
@@ -750,11 +750,11 @@ install -m 0644 %{name}.py* %{buildroot}/usr/lib/%{name}/
 
 ----
 
-``%files`` kısmı, bu RPM paketinin içerdiği dosyaları ve paketin kurulacağı sisteme yerleştirilmesi planlanan dosyaları belirttiğimiz kısımdır. 
+``%files`` kısmı, RPM paketinin içerdiği dosyaları ve paketin kurulacağı sisteme yerleştirilmesi planlanan dosyaları belirttiğimiz kısımdır. 
 
 Dikkat etmeniz gereken bir husus, bu kısmın ``%{buildroot}``'a göre yazılmaması gerektiğidir. Bu kısımdaki dosyalar, paketi kuran kullanıcının sisteminde kurulumdan sonra belirlenecek tam konuma göre belirtilmelidir. Bu yüzden, ``pelaba`` dosyasının sistemdeki konumunu belirtirken ``%{_bindir}/pelaba`` olarak belirtmemiz gerekmektedir. Aynı zamanda, dosyaları içine yerleştirdiğimiz bir kütüphane dizinin bu paket tarafından "sahiplenildiğini" belirtmek üzere bir ``%dir`` tanımlamamız gerekmektedir. 
 
-Ayrıca bu kısımda, bir dosyanın içeriğinde ne olduğunu belirtmek üzere bazı gömülü makroları kullanmaya ihtiyacınız olacaktır. Bu, ``rpm`` komutunun çıktısını sorgulamak isteyen sistem yöneticileri ve son kullanıcılar için oldukça kullanışlı olabilir. Burada kullanacağımız ``%license`` gömülü makrosu, ``rpmbuild``'e bu dosyanın yazılım lisansını içerdiğini bildirecektir. 
+Ayrıca bu kısımda, bir dosyanın içeriğinde ne olduğunu belirtmek üzere bazı gömülü makroları kullanmaya ihtiyacınız olacaktır. Bu, ``rpm`` komutunun çıktısını sorgulamak isteyen sistem yöneticileri ve son kullanıcılar için oldukça kullanışlı olabilir. Burada kullanacağımız ``%license`` gömülü makrosu, ``rpmbuild``'e dosyanın yazılım lisansını içerdiğini bildirecektir. 
 
 ``%files`` kısmı, düzenlemenizin ardından şu şekilde görünmelidir:
 
@@ -768,7 +768,7 @@ Ayrıca bu kısımda, bir dosyanın içeriğinde ne olduğunu belirtmek üzere b
 
 ----
 
-Son kısım olan ``%changelog``, tarih damgalı girdilerin Sürüm-Yayın değişikliklerinde ne olduğunu günlüklemek içindir. Bu günlükte her değişikliğin yazılması gerekmez ancak her önemli paketleme değişikliklerinin belirtilmesi gereklidir. Örneğin, bir paket içerisindeki yazılımın paketlemeye ihtiyacı varsa veya ``%build`` kısmında gösterilen derleme yönteminin değiştirilmesi gerekiyorsa burada bilgi verilebilir. Her bir girdi birden fazla maddeyi içerebilir, ve her madde ``-`` karakteriyle başlayan yeni bir satırla başlamalıdır. 
+Son kısım olan ``%changelog``, tarih damgalı girdilerin Sürüm-Yayın değişikliklerinde ne olduğunu günlüklemek içindir. Bu günlükte her değişikliğin yazılması gerekmez ancak her önemli paketleme değişikliklerinin belirtilmesi gereklidir. Örneğin, bir paket içerisindeki yazılımın paketlemeye ihtiyacı varsa veya ``%build`` kısmında gösterilen derleme yönteminin değiştirilmesi gerekiyorsa burada bilgi verilebilir. Her girdi birden fazla maddeyi içerebilir, ve her madde ``-`` karakteriyle başlayan yeni bir satırla başlamalıdır. 
 Aşağıda örnek bir girdi görmektesiniz:
 
 [source,specfile]
@@ -780,11 +780,11 @@ Aşağıda örnek bir girdi görmektesiniz:
 
 ----
 
-Yukarıdaki örnekte dikkat etmelisiniz ki, tarih damgası ``*`` karakteriyle başlamalıdır ve haftanın günü, ay, gün ve yıl ve RPM paketçisi hakkındaki iletişim bilgileri formatıyla hazırlanmalıdır. Ardından, Sürüm (Version) - Yayın'dan (Release) önce ``-`` karakterini yerleştirdik, bu alışılagelen bir yaklaşımdır ancak zorunluluk değildir. 
+Yukarıdaki örnekte dikkat etmelisiniz ki, tarih damgası ``*`` karakteriyle başlamalıdır ve günün adının ardından ay, gün, yıl şeklinde tarih atılmalı ve RPM paketçisi hakkındaki iletişim bilgileri formatıyla hazırlanmalıdır. Daha sonra, alışılageldiği üzre Sürüm (Version) - Yayın'dan (Release) önce ``-`` karakterini yerleştirdik ancak bu yaklaşım zorunlu değildir. 
 
 Ve hepsi bu kadar! **Pelaba** için bütün SPEC dosyasını yazmış bulunmaktayız! Bundan sonraki kısımda bir RPM dosyası nasıl inşa edilir, bunu okuyacaksınız! 
 
-Bütün SPEC dosyası değişikliklerden sonra şuna benzer şekilde görünmelidir:
+Bütün SPEC dosyası değişikliklerden sonra aşağıdaki gibi görünmelidir:
 
 [source,specfile]
 ----
@@ -851,7 +851,7 @@ ifdef::community[https://en.wikipedia.org/wiki/C_%28programming_language%29[C]]
 ifdef::rhel[C]
 programlama dilinde yazılmış olan örneğimiz için. Daha önceden bu örnek programı hazırlamış (ya da indirmiş) ve kaynak kodunu ``~/rpmbuild/SOURCES/`` içerisine yerleştirmiş olmalısınız. 
 
-Hadi bir adım ileri gidelim ve ``~/rpmbuild/SPECS/celaba.spec`` dosyasını açıp boşluklarını doldurmaya başlayalım. 
+Şimdi biraz daha ileri gidelim ve ``~/rpmbuild/SPECS/celaba.spec`` dosyasını açıp boşluklarını doldurmaya başlayalım. 
 
 ``rpmdev-newspec`` komutu ile bu dosyayı oluşturabilirsiniz.
 
@@ -893,16 +893,13 @@ rm -rf $RPM_BUILD_ROOT
 
 Tıpkı daha önceki örneklerimizde yaptığımız gibi, ``rpmdev-newspec`` komutunun dosyanın üst tarafına topladığı yönergelerlerle başlayacağız, bunlar: ``Name``, ``Version``, ``Release``, ``Summary``'dir. ``Name`` isimli yönerge, ``rpmdev-newspec`` tarafından hâlihazırda belirtildiği için düzenlememize gerek yok. 
 
-``Version`` isimli yönerge __celaba__'nın kaynak kodunun sürümüyle eşleşmelidir ki indirdiğimiz (ya da xref:yazilimi-paketlemeye-hazirlamak[] kısmında belirlediğimiz) üzere bu ``1.0``'dır. 
+``Version`` isimli yönerge __celaba__'nın kaynak kodu sürümüyle eşleşmelidir ki indirdiğimiz (ya da xref:yazilimi-paketlemeye-hazirlamak[] kısmında belirlediğimiz) üzere bu ``1.0``'dır. 
 
 ``Release`` hâlihazırda bizim için ``1%{?dist}`` olarak ayarlandı. Ayarlanmış değerin içindeki ``1`` sayısı paket her düzenlendiğinde bir arttırılmak zorundadır, ki bu düzenlemeler bir sorunun düzeltilmesi için yama eklemek olabilir. Fakat yeni bir ``Version`` yayınlandığında bu sayı tekrar ``1``'e geri çekilmelidir. xref:rpm-makrolari[] bölümünü okuyanlar ``%{?dist}`` ile gösterilen __disttag__ makrosunu hemen tanımış olmalıdır.
 
 ``Summary`` ise yazılımın ne olduğuna göre tek satırlık, kısa bir açıklamadır. 
 
-İlk düzenlemelerinizin ardından, SPEC dosyasının ilk bölümü şuna benzemelidir. 
-
-After your edits, the first section of the SPEC file should resemble the
-following:
+Düzenlemelerinizin ardından, SPEC dosyasının ilk bölümü şuna benzemelidir.
 
 [source,specfile]
 ----
@@ -912,29 +909,28 @@ Release:        1%{?dist}
 Summary:        C ile Yazılmış Bir Merhaba Dünya örneği
 ----
 
-Şimdi, ``rpmdev-newspec`` komutunun grupladığı iki direktiflere göz atalım:
-``License``, ``URL`` ve ``Source0``. Aynı zamanda, bu direktiflerin içine ``Source0`` ile yakından alakalı, ``Patch0`` direktifini ekleyeceğiz ki
-bu direktif bizim hazırladığımız yamayı yazılıma dâhil edecek. 
+Şimdi, ``rpmdev-newspec`` komutunun SPEC dosyamızda grupladığı direktiflerin ikinci setine göz atalım:
+``License``, ``URL`` ve ``Source0``. Ancak, bu direktiflerin içine ``Source0`` ile yakından alakalı, bizim hazırladığımız yamayı yazılıma dâhil edecek``Patch0`` direktifini de ekleyeceğiz. 
 
 ifdef::community[]
-``License`` kısmı, yazılımcının kaynak kodu için belirttiği https://tr.wikipedia.org/wiki/Yazılım_lisansı[Yazılım Lisansıdır]. SPEC dosyasında kullanılan olan lisans etiketleri RPM tabanlı https://tr.wikipedia.org/wiki/Linux[Linux] dağıtımları için farklılık gösterir. Biz, https://fedoraproject.org/wiki/Licensing:Main[Fedora Lisanslama Rehberi] için geçerli olan yazım standartlarını kullanacağız ve bu programımız için örnek olarak seçtiğimiz tarz ``GPLv3+``'dır.
+``License`` kısmı, yazılımcının kaynak kodu için belirttiği https://tr.wikipedia.org/wiki/Yazılım_lisansı[Yazılım Lisansıdır]. SPEC dosyasında kullanılan lisans etiketleri RPM tabanlı https://tr.wikipedia.org/wiki/Linux[Linux] dağıtımları için farklılık gösterir. Biz, https://fedoraproject.org/wiki/Licensing:Main[Fedora Lisanslama Rehberi] için geçerli olan yazım standartlarını kullanacağız ve bu programımız için örnek olarak seçtiğimiz tarz ``GPLv3+``'dır.
 endif::community[]
 ifdef::rhel[]
 ``Licence`` kısmı, kaynak kodunda belirtilmiş yazılım lisansıdır. SPEC dosyasında kullanılan yazım tarzı çeşitli RPM tabanlı Linux dağıtımları için farklılık gösterir. 
 endif::rhel[]
 
-``URL`` yönergesi, yazılımın anasayfasına giden bağlantıyı içerir. Bu bağlantı, kaynak koda giden bağlantıyı değil ürünün, projenin veyahut şirketin ana sayfasına giden bağlantı olmalı ve bu bağlantıdan yazılımın ilgili parçası hakkında daha fazla bilgiye ulaşılmalıdır. Şimdilik örnek olması açısından ``https://example.com/celaba`` adresini seçiyoruz. Ancak, SPEC dosyasının diğer parçaları arasında tutarlılık olması için adresteki yazılım ismini ``%{name}`` RPM makrosu ile değiştireceğiz. 
+``URL`` yönergesi, yazılımın anasayfasına giden bağlantıyı içerir. İçeriğinde, yayındaki yazılım hakkında daha fazla bilgi sahibi olmak isteyenler için ürünün, projenin veyahut şirketin anasayfasına giden bağlantı olmalıdır. Şimdilik örnek olması açısından ``https://example.com/celaba`` adresini seçiyoruz. Ancak, SPEC dosyasının diğer parçaları arasında tutarlılık olması için adresteki yazılım ismini ``%{name}`` RPM makrosu ile değiştireceğiz. 
 
-``Source0`` yöngergesi, kaynak kodunun yayınlandığı İnternet adresini içerir. Doğrudan paketlenecek yazılımın indirilmek için yayınlandığı adresi içermelidir. Bu örnekte, temsilen ``https://example.com/belaba/releases/celaba-1.0.tar.gz`` adresini kullanacağız. Elbette ki ``%{name}`` makrosunu da kullanacağız. Ayrıca, ``%{version}`` makrosunu da sürüm değişikliklerine uyum sağlamak için kullacağız. Sonuç olarak girdimiz şu şekli alacaktır:
+``Source0`` yöngergesi, kaynak kodunun yayınlandığı internet adresini içerir. Doğrudan paketlenecek yazılımın indirilmek için yayınlandığı adresi içermelidir. Bu örnekte, temsilen ``https://example.com/belaba/releases/celaba-1.0.tar.gz`` adresini kullanacağız. Elbette ki ``%{name}`` makrosunu ve buna ek olarak sürüm değişikliklerine uyum sağlamak için ``%{version}`` makrosunu da kullacağız. Sonuç olarak girdimiz şu şekli alacaktır:
 ``https://example.com/%{name}/releases/%{name}-%{version}.tar.gz``
 
 
-Bahsedilmelidir ki, tamamen sabit bir şekilde belirtilmiş bir bağlantı ileride yayınlanacak olan sürümler sıkıntı yaratacaktır ve adresteki ``1.0`` kısmı muhakkak değişecektir. Bir SPEC dosyası yalnızca tek bir sürüm için hazırlanmaz, yeni sürümlerde de olabilecek en az değişiklikle tekrar kullanılır. Bu yüzden, kodu hazırlarken adres sabit olarak değil ``https://example.com/%{name}/releases/%{name}-%{version}.tar.gz`` biçimiyle yazılır. 
+Tamamen sabit bir şekilde belirtilmiş bir bağlantı ileride yayınlanacak olan sürümler sıkıntı yaratacaktır ve adresteki ``1.0`` kısmı muhakkak değişecektir. Bir SPEC dosyası yalnızca tek bir sürüm için hazırlanmaz, yeni sürümlerde de olabilecek en az değişiklikle tekrar kullanılır. Bu yüzden, kodu hazırlarken adres sabit olarak değil ``https://example.com/%{name}/releases/%{name}-%{version}.tar.gz`` biçimiyle yazılır. 
 
 Bir sonraki işimiz ise daha önceden hazırladığımız ``.patch`` dosyasını paketimize ``%prep`` kısmında kullanılmak üzere dahil etmek. Bunun için, 
 `Patch0:&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; celaba-ciktisi-ilk-yama.patch`` satırını SPEC dosyamıza ekleyeceğiz. 
 
-Bütün değişikliklerden sonra, SPEC dosyanızın üst kısmı şuna benzemelidir:
+Bütün değişikliklerden sonra, SPEC dosyanızın üst kısmı aşağıdakine benzemelidir:
 
 [source,specfile]
 ----
@@ -957,7 +953,7 @@ Fakat ``BuildRequires``, ``rpmbuild``'e paketin **inşa edilmesi** için ne gere
 Bu örnekte kaynak kodunu derlemek üzere ``gcc`` ve ``make`` paketine ihtiyacımız olacak. Yazılımın çalışması için gereken bağımlılıklar ise ``rpmbuild`` tarafından sağlanmakta, zira programımız standart
 ifdef::community[https://tr.wikipedia.org/wiki/C_(programlama_dili)[C]]
 ifdef::rhel[C]
-kütüphaneleri dışında hiçbir şeyi gerektirmemekte ve bundan dolayı herhangi bir şeyi ``Requires`` yönergesi içerisinde belirtmemize gerek yok, bu yönergeyi SPEC içerisinden çıkartabiliriz.
+kütüphaneleri dışında hiçbir şeyi gerektirmemektedir. Bundan dolayı herhangi bir şeyi ``Requires`` yönergesi içerisinde belirtmemize gerek yok, bu yönergeyi SPEC içerisinden çıkartabiliriz.
 
 Düzenlemenizin ardından, SPEC dosyanızın üst tarafı şuna benzemelidir:
 
@@ -979,21 +975,21 @@ BuildRequires:  make
 
 ----
 
-Bundan sonraki yönergeler, "gövde başlıklar" olarak düşünülebilir. Çünkü bu yönergeler birden çok satırı, talimatı ve betiklendirilmiş görevleri kapsamakta. Bu yönergeleri de yine daha önceki yönergelerimizi nasıl düzenliyorsak aynı şekilde düzenleyeceğiz. 
+Bundan sonraki yönergeler, "gövde başlıklar" olarak düşünülebilir. Çünkü bu yönergeler birden çok satırı, talimatı ve betiklendirilmiş görevleri kapsamakta. Bu yönergeleri de daha önceki yönergelerimizdekilerle aynı şekilde düzenleyeceğiz. 
 
-``%description``, ``Summary`` yönergesine kıyasla paketlenecek yazılım hakkında çok daha uzun bir açıklamayı içerir. Bu örneğimizde çok uzun bir tanıtım yazısı yazmayacağız, ancak bu kısım dilenirse tüm bir paragrafı ya da paragrafları kapsayabilir. 
+``%description``, ``Summary`` yönergesine kıyasla paketlenecek yazılım hakkında çok daha uzun bir açıklamayı içerir. Örneğimizde çok uzun bir tanıtım yazısı yazmayacağız, ancak bu kısım dilenirse tüm bir paragrafı ya da paragrafları kapsayabilir. 
 
-``%prep``, "Hazırlamak" kelimesinin İngilize karşılığı olan __prepare__ kelimesinin kısaltmasıdır. Yazılımı derlemek için gerekli olan ortamı veya çalışma alanını inşa etmek için kullanılır. Çoğu zaman bu işler; sıkıştırılmış arşivlerin açılması, yamaların uygulanması ve kaynak kodu içerisindeki bilgiyi SPEC dosyasının sonraki bölümlerinde okunması üzerine okumaktır. Bu bölümde kısaca işimizi görmek üzere ``%setup -q`` makrosunu kullanacağız. 
+``%prep``, "Hazırlamak" kelimesinin İngilize karşılığı olan __prepare__ kelimesinin kısaltmasıdır. Yazılımı derlemek için gerekli olan ortamı veya çalışma alanını inşa etmek için kullanılır. Çoğu zaman burada olan şey; arşivlerin açılması, yamaların uygulanması ve kaynak kodda gerekebilecek bilginin taranmasıdır ki bu bilgiler SPEC dosyasının sonraki bölümlerinde kullanılacaktır. Bu bölümde kısa yoldan işimizi göreceğinden ``%setup -q`` makrosunu kullanacağız. 
 
 ``%build`` ise paketlediğimiz yazılımın nasıl derlenmesi/inşa edilmesi gerektiğini bildiren kısımdır. 
 ifdef::community[https://tr.wikipedia.org/wiki/C_(programlama_dili)[C]]
 ifdef::rhel[C] 
-ile yazdığımız programımız için basit bir ``Makefile`` yazdığımızdan dolayı, basit bir şekilde ``rpmdev-newspec`` komutunun bizim için hazırladığı http://www.gnu.org/software/make/[GNU make] komutunu kullanabiliriz. Ancak, bir 
+ile yazdığımız programımız için basit bir ``Makefile`` yazdığımızdan dolayı,``rpmdev-newspec`` komutunun bizim için hazırladığı http://www.gnu.org/software/make/[GNU make] komutunu kolayca kullanabiliriz. Ancak, bir 
 ifdef::community[https://tr.wikipedia.org/wiki/Configure["configure" (yapılandırma) betiği]
 ifdef::rhel["configure" (yapılandırma betiği]
-hazırlamadığımız için ``%configure`` yönergesini kaldırmamız gerekmekte. 
+hazırlamadığımız için ``%configure`` yönergesini kaldırmamız gerekmektedir. 
 
-Kodumuzun ``%build`` kısmı buna benzemelidir:
+Kodumuzun ``%build`` kısmı aşağıdakine benzemelidir:
 
 
 [source,specfile]
@@ -1005,12 +1001,11 @@ make %{?_smp_mflags}
 ``%install`` kısmı ise ``rpmbuild``'in dosyaları nasıl kurması gerektiğini bildiren yönergeleri içerir. Bu dizinde inşa edilen dosyalar ``BUILDROOT`` dizinine eklenir. Bu dizin, bir 
 ifdef::community[https://en.wikipedia.org/wiki/Chroot[chroot]]
 ifdef::rhel[chroot]
-temel dizinidir ve paketi kuran tarafın kök dizinini temsil eder. Burada, kurduğumuz dosyaların dizinlerini oluşturmamız gerekir. Buradaki RPM Makroları, bu işi gerçekleştirirken değişmez kalıp kodlardan kaçınmamıza yardımcı olur. 
-sabit kodlardan kaçınmamıza yardımcı olur.
+temel dizinidir ve paketi kuran tarafın kök dizinini temsil eder. Yapmamız gereken şey kurduğumuz dosyaların dizinlerini oluşturmaktır. Buradaki RPM Makroları, bu işi gerçekleştirirken değişmez kalıp kodlardan kaçınmamıza yardımcı olur. 
 
 Tekrar bahsetmek gerekirse, elimizdeki ``Makefile`` dosyasındaki kurulum talimatları kolaylıkla ``rpmdev-newspec`` tarafından sağlanmış olan ``%make_install`` makrosu aracılığıyla kurulabilir. 
 
-Bütün değişikliklerden sonra ``%install`` yönergesi şu şekilde görünmelidir:
+Bütün değişikliklerden sonra ``%install`` yönergesi aşağıdaki şekilde görünmelidir:
 
 [source,specfile]
 ----
@@ -1019,9 +1014,9 @@ Bütün değişikliklerden sonra ``%install`` yönergesi şu şekilde görünmel
 
 ----
 
-``%files`` kısmı, bu RPM paketinin içerdiği dosyaları ve paketin kurulacağı sisteme yerleştirilmesi planlanan dosyaları belirttiğimiz kısımdır. 
+``%files`` kısmı, RPM paketinin içerdiği dosyaları ve paketin kurulacağı sisteme yerleştirilmesi planlanan dosyaları belirttiğimiz kısımdır. 
 
-Dikkat etmeniz gereken bir husus, bu kısmın ``%{buildroot}``'a göre yazılmaması gerektiğidir. Bu kısımdaki dosyalar, paketi kuran kullanıcının sisteminde kurulumdan sonra belirlenecek tam konuma göre belirtilmelidir. Bu yüzden, ``celaba`` dosyasının sistemdeki konumunu belirtirken ``%{_bindir}/celaba`` olarak belirtmemiz gerekmektedir. 
+Dikkat etmeniz gereken bir husus, bu kısmın ``%{buildroot}``'a göre yazılmaması gerektiğidir çünkü buradaki dosyalar, paketi kuran kullanıcının sisteminde kurulumdan sonra belirlenecek tam konuma göre belirtilmelidir. Bu yüzden, ``celaba`` dosyasının sistemdeki konumunu belirtirken ``%{_bindir}/celaba`` olarak belirtmemiz gerekmektedir. 
 
 Ayrıca bu kısımda, bir dosyanın içeriğinde ne olduğunu belirtmek üzere bazı gömülü makroları kullanmaya ihtiyacınız olacaktır. Bu, ``rpm`` komutunun çıktısını sorgulamak isteyen sistem yöneticileri ve son kullanıcılar için oldukça kullanışlı olabilir. Burada kullanacağımız ``%license`` gömülü makrosu, ``rpmbuild``'e bu dosyanın yazılım lisansını içerdiğini bildirecektir.
 
@@ -1035,7 +1030,7 @@ Ayrıca bu kısımda, bir dosyanın içeriğinde ne olduğunu belirtmek üzere b
 
 ----
 
-Son kısım olan ``%changelog``'da, tarih damgalı girdiler Sürüm-Yayın değişikliklerinde ne olduğunu günlüklemek içindir. Bu günlükte her değişikliğin yazılması gerekmez ancak her önemli paketleme değişikliklerinin belirtilmesi gereklidir. Örneğin, bir paket içerisindeki yazılımın paketlemeye ihtiyacı varsa veya ``%build`` kısmında gösterilen derleme yönteminin değiştirilmesi gerekiyorsa burada bilgi verilebilir. Her bir girdi birden fazla maddeyi içerebilir, ve her madde ``-`` karakteriyle başlayan yeni bir satırla başlamalıdır. 
+Son kısım olan ``%changelog``'da, tarih damgalı girdiler Sürüm-Yayın değişikliklerinde ne olduğunun kaydını tutmak içindir. Bu günlükte her değişikliğin yazılması gerekmez ancak her önemli paketleme değişikliklerinin belirtilmesi gereklidir. Örneğin, bir paket içerisindeki yazılımın paketlemeye ihtiyacı varsa veya ``%build`` kısmında gösterilen derleme yönteminin değiştirilmesi gerekiyorsa burada bilgi verilebilir. Her bir girdi birden fazla maddeyi içerebilir, ve her madde ``-`` karakteriyle başlayan yeni bir satırla başlamalıdır. 
 Aşağıda örnek bir girdi görmektesiniz:
 
 [source,specfile]
@@ -1047,13 +1042,11 @@ Aşağıda örnek bir girdi görmektesiniz:
 
 ----
 
-Yukarıdaki örnekte dikkat etmelisiniz ki, tarih damgası ``*`` karakteriyle başlamalıdır ve haftanın günü, ay, gün ve yıl ve RPM paketçisi hakkındaki iletişim bilgileri formatıyla hazırlanmalıdır. Ardından, Sürüm (Version) - Yayın'dan (Release) önce ``-`` karakterini yerleştirdik, bu alışılagelen bir yaklaşımdır ancak zorunluluk değildir. 
+Yukarıdaki örnekte dikkat etmelisiniz ki, tarih damgası ``*`` karakteriyle başlamalıdır ve günün adının ardından ay, gün,yıl şeklinde tarih atılmalı ve RPM paketçisi hakkındaki iletişim bilgileri formatıyla hazırlanmalıdır. Ardından, Sürüm (Version) - Yayın'dan (Release) önce ``-`` karakterini yerleştirdik, bu alışılagelen bir yaklaşımdır ancak zorunlu değildir. 
 
-Ve hepsi bu kadar! **celaba** için bütün SPEC dosyasını yazmış bulunmaktayız! Bundan sonraki kısımda bir RPM dosyası nasıl inşa edilir, bunu okuyacaksınız! 
+Ve hepsi bu kadar! **celaba** için bütün SPEC dosyasını yazmış bulunmaktayız. Bundan sonraki kısımda bir RPM dosyası nasıl inşa edilir, bunu okuyacaksınız.
 
-Bütün SPEC dosyası aşağıda aşağıdaki gösterildiği gibi olmalıdır: 
-
-The full SPEC file should now look like the following:
+Bütün SPEC dosyası aşağıdaki gibi olmalıdır: 
 
 [source,specfile]
 ----
@@ -1110,14 +1103,14 @@ RPMler ``rpmbuild`` komutu aracılığıyla inşa edilirler. Farklı senaryolara
 . kaynak RPM inşa etmek
 . ikili RPM inşa etmek
 
-``rpmbuild`` komutu belirli bir dizin ve dosya ypısını gerektirir ki bu yapı ``rpmdev-setuptree`` aracıyla hazırlanmış yapının birebir aynısıdır. Daha önceki talimatlar da aynı şekilde bu gerekli olan yapıya uygundur. 
+``rpmbuild`` komutu belirli bir dizin ve dosya yapısını gerektirir ki bu yapı ``rpmdev-setuptree`` aracıyla hazırlanmış yapının birebir aynısıdır. Aynı şekilde daha önceki talimatlar da gerekli olan bu yapıya uygundur. 
 
 [[kaynak-rpmler]]
 === Kaynak RPMler
 
-Neden bir kaynak RPM (SRPM) inşa etmeliyiz?
+Neden kaynak RPM (SRPM) inşa etmeliyiz?
 
-. Yayını yapılmış bir RPM'in İsim-Sürüm-Yayın yapısına özgü gerçek kaynağı korumak için. Kaynak RPMler SPEC dosyasını, kaynak kodunu ve ilşkili yamaları barındırır. Bu tür paketler geri dönüp ne olduğunu incelemek ve hata ayıklamak için kullanışlıdır.
+. Yayını yapılmış bir RPM'in İsim-Sürüm-Yayın yapısına özgü gerçek kaynağı korumak için. Kaynak RPMler SPEC dosyasını, kaynak kodunu ve ilişkili yamaları barındırır. Bu tür paketler geri dönüp ne olduğunu incelemek ve hata ayıklamak için kullanışlıdır.
 
 ifdef::community[]
 . Çeşitli donanım platformları veya https://tr.wikipedia.org/wiki/Bilgisayar_organizasyonu[işlemci mimarileri] için RPM inşa edebilmek için
@@ -1156,15 +1149,15 @@ Wrote: /home/admiller/rpmbuild/SRPMS/celaba-1.0-1.el7.src.rpm
 
 İnşa edilecek olan kaynak RPMlerinin (İngilizce: Source RPM, SRPM) ``rpmbuild/SRPM`` dizinine yerleştirileceğine dikkat ediniz ki bu dizin ``rpmbuild`` komutunun gerektirdiği dizinlerden birisidir. 
 
-Bir kaynak RPM derlemek için gerekli olan her şey budur.
+Kaynak RPM derlemek için gerekli olan her şey budur.
 
 [[ikili-rpmler]]
 === İkili RPMler
 
 İkili RPM inşa etmek için iki yöntem vardır:
 
-. Bir kaynak RPM'i ``rpmbuild --rebuild`` komutuyla yeniden derlemek.
-. ``rpmbuild -bb`` komutunu kullanarak bir SPEC dosyasından inşa etmek. ``-bb`` parametresi, Türkçesi "ikili inşa" olan "build binary" kelimelerinin kısaltmasıdır. 
+. Kaynak RPM'i ``rpmbuild --rebuild`` komutuyla yeniden derlemek.
+. ``rpmbuild -bb`` komutunu kullanarak SPEC dosyasından inşa etmek. ``-bb`` parametresi, Türkçesi "ikili inşa" olan "build binary" kelimelerinin kısaltmasıdır. 
 
 [[yeniden-insa]]
 ==== Kaynak RPM'i Yeniden İnşa Etmek
@@ -1184,7 +1177,7 @@ $ rpmbuild --rebuild ~/rpmbuild/SRPMS/celaba-1.0-1.el7.src.rpm
 
 ----
 
-Ve RPM paketlerini inşa etmiş bulunmaktasınız. Şimdi, bir kaç detay:
+Ve RPM paketlerini inşa etmiş bulunmaktasınız. Şimdi, birkaç detay:
 
 * İkili RPM'in inşasında üretilen çıktı gayet ayrıntılıdır ki bu hata ayıklamak için kullanışlıdır. Çıktı, SPEC dosyasına ve farklı örneklere göre farklılık gösterir. 
 * İkili RPMler ``~/rpmbuild/RPMS/MIMARIADI`` isimli bir dosyaya yerleştirilir. ``MIMARIADI``, 
@@ -1201,7 +1194,7 @@ tekabül eder. Eğer paket bir mimariye özgü değilse ``~/rpmbuild/RPMS/noarch
 . SPEC dosyası da kaynak kodu da temizlenir.
 --
 +
-Eğer SPEC dosyasını ve kaynak kodunu derlemeden sonra da saklamak isterseniz, iki seçeneğiniz var:
+Eğer SPEC dosyasını ve kaynak kodunu derlendikten sonra da saklamak isterseniz, iki seçeneğiniz var:
 +
 --
 * İnşa sırasında, ``--rebuild`` yerine ``--recompile`` parametresini kullanın.
@@ -1224,7 +1217,7 @@ Updating / installing...
 
 ----
 +
-SPEC dosyasını ve kaynak kodlarıyla etkileşimi sürdürmek için, gördüğünüz gibi, ``rpm -Uvh`` komutunu kullanmanız gerekmektedir.
+SPEC dosyası ve kaynak kodlarıyla etkileşimi sürdürmek için, gördüğünüz gibi, ``rpm -Uvh`` komutunu kullanmanız gerekmektedir.
 
 [[ikili-insa]]
 ==== İkili Paketi SPEC dosyasından inşa etmek
@@ -1248,9 +1241,9 @@ xref:yeniden-insa[] kısmındaki bilgilerin çoğunluğu burada da geçerlidir.
 [[checking-rpms-for-sanity]]
 == RPMlerin Geçerliliğini Denetleme
 
-Bir paketi oluşturduktan sonra paket kalitesini test etmek hiç de fena bir fikir değildir. Paketin kalitesinden kasıt, paketin sunduğu yazılım değil paketin kendi kalitesidir. Bu denetimi yapmak üzere kullanılan ana araç https://github.com/rpm-software-management/rpmlint[rpmlint]'dır. Bu araç sayesinde RPM'in bakım kolaylaşır, paketin geçerlilik denetimi ve paketin statik hata analizi iyileşir. 
+Bir paketi oluşturduktan sonra paket kalitesini test etmek hiç de fena bir fikir değildir. Paketin kalitesinden kasıt, paketin sunduğu yazılım değil paketin kendi kalitesidir. Bu denetimi yapmak üzere kullanılan ana araç https://github.com/rpm-software-management/rpmlint[rpmlint]'dır. Bu araç sayesinde RPM'nin bakımı kolaylaşır, paketin geçerlilik denetimi ve statik hata analizi iyileşir. 
 
-``rpmlint``'in oldukça sıkı ilkelere sahip olduğa dikkat ediniz. Sonraki örneklerde göreceğiniz gibi, kimi zaman hata ve uyarı mesajlarını es geçmekte kimi zaman sıkıntı yoktur.
+``rpmlint``'in oldukça sıkı ilkelere sahip olduğa dikkat ediniz. Sonraki örneklerde göreceğiniz gibi, kimi zaman hata ve uyarı mesajlarını es geçmek sıkıntı yaratmaz.
 
 NOTE: Göreceğiniz örneklerde ``rpmlint`` bize gayet sade bir çıktı sunmakta. Eğer hataların ve uyarıların detaylı bir çıktısını istiyorsanız, bu komut yerine ``rpmlint -i`` komutunu kullanabilirsiniz. 
 
@@ -1285,7 +1278,7 @@ belaba.src: W: invalid-url Source0: https://www.example.com/belaba/releases/bela
 
 Gözlemlenenler: 
 
-* ``Belaba`` kaynak RPM paketi için fazladan bir uyarımız daha var. Bu uyarı, ``URL`` yönergesindeki bağlantının ulaşılamaz olmasıyla ilgili. Gelecekte bu bağlantının geçerli olacağını varsayarak, bu uyarıyı da gözardı edebiliriz.  
+* ``Belaba`` kaynak RPM paketi için ``URL`` yönergesindeki bağlantının ulaşılamaz olmasıyla ilgili fazladan bir uyarımız daha var. Gelecekte bu bağlantının geçerli olacağını varsayarak, bu uyarıyı da gözardı edebiliriz.  
 
 
 [[ikili-belaba-rpm-denetimi]]
@@ -1296,7 +1289,7 @@ Gözlemlenenler:
 . Belgelendirme
 ifdef::community[. https://tr.wikipedia.org/wiki/Man_(elkitabı)_sayfası[Man (elkitabı) sayfaları]]
 ifdef::rhel[. Man (elkitabı) sayfaları]
-. Dosya Sistemi Hiyerarşisi Standartı'nın doğru kullanımı
+. Dosya Sistemi Hiyerarşisi Standartıı'nın doğru kullanımı
 
 
 ``belaba`` ikili dosyası için ``rpmlint`` çıktısı şu şekildedir:
@@ -1464,7 +1457,7 @@ celaba.x86_64: W: no-manual-page-for-binary celaba
 
 Gözlemlenenler
 
-* ``no-documentation`` (Tr. belgelendirme yok) ve ``no-manual-page-for-binary`` (Tr. ikili (paket) için man sayfası yok) uyarıları RPM paketimizin belgeleri olmadığını gösteriyor, çünkü böyle bir şey sağlamadık. 
+* ``no-documentation`` (Tr. belgelendirme yok) ve ``no-manual-page-for-binary`` (Tr. ikili (paket) için man sayfası yok) uyarıları RPM paketimizin belgelerinin olmadığını gösteriyor, çünkü böyle bir şey sağlamadık. 
 
 Uyarıları görmezden gelirsek, RPM paketimiz ``rpmlint`` denetiminden geçmiş sayılır.
 

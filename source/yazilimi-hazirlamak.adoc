@@ -1,7 +1,7 @@
 [[yazilimi-paketlemeye-hazirlamak]]
 = Yazılımı Paketlemeye Hazırlamak
 
-Bu bölüm bir RPM paketçisinin bilmesi gereken kaynak kodu ve yazılım oluşturmak gibi konuları içerir. 
+Bu bölüm bir RPM paketçisinin bilmesi gereken temel konular olan kaynak kodundan ve yazılım oluşturmaktan bahseder.
 
 [[kaynak-kodu-nedir]]
 == Kaynak kodu nedir?
@@ -10,9 +10,9 @@ Bu bölüm bir RPM paketçisinin bilmesi gereken kaynak kodu ve yazılım oluşt
 ifdef::community[https://tr.wikipedia.org/wiki/Programlama_dili[Programlama Dili]]
 ifdef::rhel[Programlama Dili]
 
-Bu klavuz farklı programlama dillerinde yazılmış ``Merhaba Dünya`` programının üç sürümünü ele alır. Farklı programlama dilleriyle yazılmış bu programlar farklı şekilde paketlenir ve bir RPM paketçisinin karşılaşacağı üç farklı durumu özetler.
+Bu klavuz farklı programlama dillerinde yazılmış ``Merhaba Dünya`` programının üç sürümünü ele alır. Farklı programlama dilleriyle yazılmış programlar farklı şekilde paketlenir ve bir RPM paketçisinin karşılaşacağı üç farklı durumu özetler.
 
-Not: Yüzden fazla programlama dili vardır. Bu belge, yalnızca üç tanesini ele alır fakat bir kuşbakışı için yeterlidir. 
+Not: Yüzden fazla programlama dili vardır. Bu belge, yalnızca üç tanesini ele alır fakat kavramsal bir gözden geçirme için yeterlidir. 
 
 https://www.gnu.org/software/bash/[Bash] ile yazılmış bir ``Merhaba Dünya``:
 
@@ -55,14 +55,14 @@ int main(void) {
 
 ----
 
-Bu üç programın da amacı komut satırına "Merhaba Dünya" yazmaktır. 
+Yukarıdaki üç programın da amacı komut satırına "Merhaba Dünya" yazmaktır. 
 
 Not: Programlamayı bilmek yazılım paketlemek için gerekli değildir ama faydalıdır.
 
 [[programlar-nasil-yapilir]]
 == Programlar Nasıl Yapılır?
 
-İnsan tarafından okunabilen kaynak kodunu bilgisayarın takip ettiği talimatları sunan makine koduna çevirmek için pek çok yöntem vardır. Bununla birlikte, bu yöntemler şu üç tanesine indirgenebilir:
+İnsan tarafından okunabilen kaynak kodunu bilgisayarın takip ettiği talimatları sunan makine koduna çevirmek için pek çok yöntem vardır. Bununla birlikte, bu yöntemler üç taneye indirgenebilir:
 
 1. Program yerel olarak derlenebilir.
 2. Program ham hâliyle yorumlanabilir.
@@ -76,12 +76,12 @@ Not: Programlamayı bilmek yazılım paketlemek için gerekli değildir ama fayd
 Bu yolla derlenmiş RPM paketleri belirli bir 
 ifdef::community[https://tr.wikipedia.org/wiki/Bilgisayar_organizasyonu[mimariye]]
 ifdef::rhel[mimariye]
-yöneliktir. Yani, sizin 64 bit (x86_64) mimarisine yönelik hazırladığınız yazılım 32 bit (x86) mimarisinde çalıştırılamaz. Bu yazılımların paketlerinin isimlerinde hangi mimariyi hedef aldığı belirtilir. 
+yöneliktir. Yani, sizin 64 bit (x86_64) mimarisine yönelik hazırladığınız yazılım 32 bit (x86) mimarisinde çalıştırılamaz. Yazılımların paketlerinin isimlerinde hangi mimariyi hedef aldığı belirtilir. 
 
 [[yorumlanan-kod]]
 === Yorumlanan Kod
 
-https://www.gnu.org/software/bash/[bash] ve https://www.python.org/[Python] gibi bazı programlama dilleri doğrudan makine diline derlenmez. Bunun yerine, bu dillerin dillerde yazılan kaynak kodları herhangi bir ön dönüşüme tabii tutulmaksızın adım adım çalıştılır. Bu kodları bir
+https://www.gnu.org/software/bash/[bash] ve https://www.python.org/[Python] gibi bazı programlama dilleri doğrudan makine diline derlenmez. Bunun yerine, bu dillerin dillerde yazılan kaynak kodları herhangi bir ön dönüşüme tabii tutulmaksızın adım adım çalıştılır. Bu kodlar bir
 ifdef::community[https://tr.wikipedia.org/wiki/Yorumlayıcı[Dil Yorumlayıcısı]]
 ifdef::rhel[Dil Yorumlayıcısı]
 tarafından veya Dil Sanal Makinesi tarafından işlenir. 
@@ -102,7 +102,7 @@ Ham hâliyle yorumlanan dillerin programlarının derlenmeye ihtiyacı yoktur, d
 ==== Bayt derlenen programlar
 Bayt derlenen dillerin bayt koduna derlenmeye ihtiyacı vardır. Bu programlar dil sanal makineleri tarafından çalıştırılırlar. 
 
-Not: Ham olarak yorumlanmak veya bayt koduna derlenmek arasında bir seçenek sunar.
+Not: Bazı diller ham olarak yorumlanmak veya bayt koduna derlenmek arasında bir seçenek sunar.
 
 // This difference reflects on the packaging procedure. Some languages give a choice: they can be raw-interpreted or byte-compiled. (Bu kısmı çevirmiyorum)
 
@@ -202,7 +202,7 @@ gcc -g -o celaba celaba.c
 
 ----
 
-Şimdi, hiçbir şey olmayacağını bile bile tekrar bir inşaya teşebbüs edelim:
+Yine, hiçbir şey olmayacağını bile bile tekrar bir inşaya teşebbüs edelim:
 
 [source,bash]
 ----
@@ -236,13 +236,13 @@ olarak anılır. (Bağlantı İngilizcedir.)
 
 ifdef::community[https://en.wikipedia.org/wiki/Shebang_%28Unix%29[Mevzular]]
 ifdef::rhel[Mevzular]
-bir yazı dosyasının çalıştırılabilir bir dosya olarak ele alınmasına izin verir. Sistemin program yükleyicisi bu satırı özellikle arar ve bu satır üzerinde bulunan ikili programla çalıştır ki bu ilgili programlama dilinin yorumlayıcısıdır.
+bir yazı dosyasının çalıştırılabilir bir dosya olarak ele alınmasına izin verir. Sistemin program yükleyicisi bu satırı özellikle arar ve bu satır üzerinde bulunan ikili programla çalıştırır. Bu sonra ilgili programlama dilinin yorumlayıcısı olarak kullanılır.
 ====
 
 [[bayt-derlenen-kod]]
 ==== Bayt Derlenen Kod 
 
-Bu örnekte, Python ile yazılmış ``pelaba.py`` isimli programı bayt koduna dönüştüreceğiz, bu bayt kodu Python dili sanal makinesi tarafından derlenecek. Python kodları istenirse ham yorumlanabilir ancak bayt derlenen sürümü daha hızlıdır. Dolayıcıyla, RPM paketçileri son kullanıcıya paketleri dağıtırken bayt derlenen sürümünü tercih eder. 
+Bu örnekte, Python ile yazılmış ``pelaba.py`` isimli programı bayt koduna dönüştüreceğiz, bu bayt kodu Python sanal makinesi tarafından derlenecek. Python kodları istenirse ham yorumlanabilir ancak bayt derlenen sürümü daha hızlıdır. Dolayıcıyla, RPM paketçileri son kullanıcıya paketleri dağıtırken bayt derlenen sürümünü tercih eder. 
 
 ``pello.py``
 
@@ -254,7 +254,7 @@ print("Merhaba Dünya")
 
 ----
 
-Bayt derlenen programlar için gerekli diğer dillerden daha farklıdır. Bu yöntem dil üzerine kuruludur, dilin sanal makinesini gerektirir ve kullanılan araçlar/süreçler dile aittir. 
+Bayt derlenen programlar için prosedür dilden dile değişir. Bu yöntem dil üzerine kuruludur, dilin sanal makinesini gerektirir ve kullanılan araçlar/süreçler dile aittir. 
 
 NOTE: https://www.python.org/[Python] çoğunlukla bayt olarak derlenir, ancak bu bahsettiğimiz şekilde değil. Bahsi geçen yöntem topluluk standarlarına uyumlu olmayı değil sade olmayı gerektirir. Gerçek dünyada kullanılan Python rehberleri için şu bağlantıya bakabilirsiniz: 
 https://docs.python.org/2/library/distribution.html[Software Packaging and
@@ -282,6 +282,7 @@ Hello World
 
 [[ham-yorumlanan]]
 ==== Ham Hâlde Yorumlanan Kod
+(Ç.N; Ham olarak yorumlanan kod (raw interpreted) hiçbir işleme tabii tutulmadan yazıldığı gibi yorumlanan kod demektir.)
 
 Bu örneğimizde ise https://www.gnu.org/software/bash/[bash] ile ham yorumlanan ``belaba`` programımızı inceleyeceğiz. 
 
@@ -294,7 +295,7 @@ Bu örneğimizde ise https://www.gnu.org/software/bash/[bash] ile ham yorumlanan
 printf "Merhaba Dünya\n"
 
 ----
-_Bash_ gibi kabuk betik dilleriyle yazılmış programlar ham yorumlanır. Hâliyle sadece dosyayı kaynak kdoundan çalıştırılabilir yapmanız ve çalıştırmanız gerekmektedir:
+_Bash_ gibi kabuk betik dilleriyle yazılmış programlar ham yorumlanır. Hâliyle sadece dosyayı kaynak kodundan çalıştırılabilir yapmanız ve çalıştırmanız gerekmektedir:
 
 [source,bash]
 ----
@@ -307,9 +308,9 @@ Merhaba Dünya
 [[yazilimi-yamalamak]]
 == Yazılımı Yamalamak
 
-**Yama**, başka bir kaynak kodunu güncelleyen bir kaynak kodudur. "__diff__" şeklinde formatlanmıştır zira bu format iki farklı versiyon arasındaki farkı gösterir. "__diff__" formatı, ``diff`` isimli bir araç aracılığıyla oluşturulur ki daha sonra http://savannah.gnu.org/projects/patch/[patch] isimli bir araç aracılığıyla kaynak koduna uygulanır. 
+**Yama**, başka bir kaynak kodunu güncelleyen bir kaynak kodudur. "__diff__" şeklinde formatlanmıştır zira bu format iki farklı versiyon arasındaki farkı gösterir. "__diff__" formatı, ``diff`` isimli bir araç kullanılarak oluşturulur ki daha sonra http://savannah.gnu.org/projects/patch/[patch] isimli bir araç kullanılarak kaynak koduna uygulanır. 
 
-Not: Yazılım geliştirileri kendi kodlarını kontrol etmek için çoğunlukla https://git-scm.com/[git] gibi Versiyon Kontrol Sistemlerini kullanır. Bu tür araçların __diff__ yaratmak ve yamaları uygulamak için kendi yöntemleri vardır. 
+Not: Yazılım geliştiricileri kendi kodlarını kontrol etmek için çoğunlukla https://git-scm.com/[git] gibi Versiyon Kontrol Sistemlerini kullanır. Bu tür araçların __diff__ yaratmak ve yamaları uygulamak için kendi yöntemleri vardır. 
 
 Aşağıdaki örnekte, orijinal kaynak kodundan ``diff`` kullanarak yeni bir yama oluşturuyoruz ve ``patch`` kullanarak uyguluyoruz. Yamalamadan, daha sonraları xref:spec-dosyalari-ile-calismak[] kısmında yararlanacağız. 
 
@@ -360,7 +361,7 @@ $ diff -Naur celaba.c.orig celaba.c
  }
 ----
 +
-. ``-`` ile başlayan satırlar, orijinal kaynak kodunda yer alan ve çıkarılmış kodlardır. ``+`` ile yer alan kodlar ise çıkarılan kodların yerine geçer. 
+. ``-`` ile başlayan satırlar, orijinal kaynak kodundan çıkarılmış kodlardır. ``+`` ile yer alan kodlar ise çıkarılan kodların yerine geçer. 
 +
 
 . Yamayı bir dosyaya kaydedelim:
@@ -424,23 +425,23 @@ ifdef::community[https://tr.wikipedia.org/wiki/Linux[Linux]]
 ifdef::rhel[Linux]
 ve Unix benzeri işletim sistemlerinin büyük bir avantajı 
 ifdef::community[https://en.wikipedia.org/wiki/Filesystem_Hierarchy_Standard[Dosya Sistemi Hiyerarşisi Standartlarıdır]]
-ifdef::rhel[Dosya Sistemi Hiyerarşisi Standartlarıdır]. Bu standartlar, hangi dizinde hangi dosyanın depolanacağınıbelirtir. RPM paketlerinden kurulan dosyalar ise Dosya Sistemi Hiyerarşisine uygun olmalıdır. Örneğin, çalıştırılabilir bir dosya 
+ifdef::rhel[Dosya Sistemi Hiyerarşisi Standartlarıdır]. Bu standartlar, hangi dizinde hangi dosyanın depolanacağını belirtir. RPM paketlerinden kurulan dosyalar ise Dosya Sistemi Hiyerarşisine uygun olmalıdır. Örneğin, çalıştırılabilir bir dosya 
 ifdef::community[https://en.wikipedia.org/wiki/PATH_%28variable%29[PATH]]
 ifdef::rhel[PATH] 
 değişkeninde belirtilen bir dizin altında tutulmalıdır. 
 
-Bu belgenin bağlamında, bir __İhtiyari Yapı__ RPM aracılığıyla sisteme kurulan herhangi bir şeydir. Bu RPM ve sistem için bir betik, paketin içerdiği kaynak kodundan derlenen bir ikili bir dosya, önceden derlenmiş ikili bir dosya veya başka bir dosya olabilir. 
+Bu belgenin bağlamında, bir __İhtiyari Yapı__ RPM aracılığıyla sisteme kurulan herhangi bir şeydir. Bu RPM ve sistem için bir betik, paketin içerdiği kaynak kodundan derlenen ikili bir dosya, önceden derlenmiş ikili bir dosya veya başka bir dosya olabilir. 
 
-Biz, sisteme __İhtiyari Yapıları__ yerleştirmenin iki popüler yolunu keşfedeceğiz: ``install`` veya ``make install`` kullanmak.
+Burada, sisteme __İhtiyari Yapıları__ yerleştirmenin iki popüler yolunu keşfedeceğiz: ``install`` veya ``make install`` kullanmak.
 
 [[install-komutu]]
 === Install komutunu kullanmak
 
-Kimi zaman inşa sürecini http://www.gnu.org/software/make/[GNU make]  gibi araçlarla otomatikleştirmek pek iyi bir fikir olmayabilir. Mesela, derleyeceğimiz program öyle basittir ki böyle gösterişli şeylere pek ihtiyaç duymaz. Bu ve bunun gibi durumlarda paketçiler çoğunlukla http://www.gnu.org/software/coreutils/coreutils.html[coreutils] tarafından sunulan ``install`` komutunu tercih ederler. Bu komut sözünü ettiğimiz yapıları dosya sisteminde belirli bir dizine, belirli izinlerle yerleştirir. 
+Program çok basit olduğunda ve fazladan ek yüke ihtiyaç duymadığında, http://www.gnu.org/software/make/[GNU make] gibi bir otomatik derleme aracı kullanmak pek mantıklı olmayabilir. Bu ve bunun gibi durumlarda paketçiler çoğunlukla http://www.gnu.org/software/coreutils/coreutils.html[coreutils] tarafından sunulan ``install`` komutunu tercih ederler. Bu komut sözünü ettiğimiz yapıları dosya sisteminde belirli bir dizine, belirli izinlerle yerleştirir. 
 
-Aşağıdaki örnekte daha önce hazırladığımız ``belaba`` dosyasını bir ihtiyari yapı olarak sistemimize kuracağız. Yalnız dikkat etmeniz gereken bir şey, bu kurulum için http://www.sudo.ws/[sudo] veya root yetkilerine sahip olmanız gerektiğidir. 
+Aşağıdaki örnekte daha önce hazırladığımız ``belaba`` dosyasını ihtiyari yapı olarak sistemimize kuracağız. Yalnız dikkat etmeniz gereken bir şey, bu kurulum için http://www.sudo.ws/[sudo] veya root yetkilerine sahip olmanız gerektiğidir. 
 
-Bu örnekte, ``belaba`` dosyasını ``/usr/bin`` içerisine ``install`` komutuyla yerleştireceğiz, elbette ki çalıştırmak için gerekli izinlerle beraber:
+Aşağıdaki örnekte, ``belaba`` dosyasını ``/usr/bin`` içerisine ``install`` komutuyla yerleştireceğiz, elbette ki çalıştırmak için gerekli izinlerle beraber:
 
 
 [source,bash]
@@ -466,9 +467,9 @@ Merhaba Dünya!
 [[make-install]]
 === Make Install komutunu kullanmak
 
-Bir yazılımı otomatikleştirilmiş bir şekilde kurmak için popüler bir yöntem ``make install`` komutunu kullanmaktır. Bu yöntem, ``Makefile`` içerisinde ihtiyari yapıların nasıl kurulması gerektiğini belirtmenizi gerektirir. 
+Bir yazılımı otomatikleştirilmiş şekilde kurmak için ``make install`` komutunu kullanmak popüler bir yöntemdir. Bu yöntem, ``Makefile`` içerisinde ihtiyari yapıların sisteme nasıl kurulacağını belirtmenizi gerektirir. 
 
-Not: Çoğunlukla ``Makefile`` paketçi tarafından değil geliştirici tarafından hazırlanır. 
+Not:  ``Makefile`` çoğunlukla paketçi tarafından değil geliştirici tarafından hazırlanır. 
 
 ``Makefile`` içerisine ``install`` kısmını ekleyin:
 
@@ -518,7 +519,7 @@ Merhaba Dünya!
 
 ----
 
-Sisteminize inşa edilmiş bir yapıyı belirtilmiş bir konuma kurmuş bulunmaktasınız. 
+Sisteminize inşa edilmiş bir yapıyı, belirtilmiş bir konuma kurmuş bulunmaktasınız. 
 
 [[kodu-paketlemek-icin-hazirlamak]]
 == Kodu Paketlemek İçin Hazırlamak
@@ -531,7 +532,7 @@ Not: Kaynak kodu arşivleme işi çoğunlukla RPM paketçisinin görevi değildi
 
 
 
-Yazılımlar bir 
+Yazılımlar
 ifdef::community[https://tr.wikipedia.org/wiki/Yazılım_lisansı[yazılım lisansı]]
 ifdef::rhel[yazılım lisansı] aracılığıyla lisanslanmalıdır. Biz örnek olarak https://www.gnu.org/licenses/quick-guide-gplv3.html[GPLv3] lisansını ele alacağız. Lisans metnini örnek programlarımızın ``LICENCE`` dosyasında sunacağız. Bir RPM paketçisi, paketlerken lisans dosyaları ile ilgilenmelidir. 
 
@@ -558,16 +559,17 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 [[tarballa-kaynak-kodu-eklemek]]
 == Tarball İçerisine Kaynak Kodu Eklemek
 
-Ç.N: ``Tarball``, kaynak kodlarını içinde bulunduran ve uzantısında "tar" bulunan (Örn: .tar.gz)  arşiv dosyalarına verilen isim. Literatürde bu şekilde yer aldığından, motamot çevirisi de "Tartopu" gibi anlamsız bir şeye tekabül ettiğinden ``tarball`` kelimesini kabul ediyorum. Eğer ``tarball`` yerine geçecek iyi bir fikriniz varsa muhakkak bana bildirin. 
+Ç.N: ``Tarball``, kaynak kodlarını içinde bulunduran ve uzantısında "tar" bulunan (Örn: .tar.gz)  arşiv dosyalarına verilen isim. Literatürde bu şekilde yer alır.
+Mot a mot çevirisi de "Tartopu" gibi anlamsız bir şeye tekabül ettiği için``tarball`` kelimesini kabul ediyorum. Eğer ``tarball`` yerine geçecek iyi bir fikriniz varsa muhakkak bana bildirin. 
 
-Aşağıdaki örneklerde, üç ``Merhaba Dünya`` programının her birisini https://www.gnu.org/software/gzip/[gzip] ile sıkıştırılmış tarballlara ekliyoruz. Yazılımlar çoğunlukla paketlenmeden önce bu şekilde yayınlanırlar.
+Aşağıdaki örneklerde bulunan üç adet ``Merhaba Dünya`` programının her birini https://www.gnu.org/software/gzip/[gzip] ile sıkıştırılmış tarballlara ekliyoruz. Yazılımlar çoğunlukla paketlenmeden önce bu şekilde yayınlanırlar.
 
 [[belaba]]
 === belaba
 
 __belaba__ yazılımı, https://www.gnu.org/software/bash/[bash] ile ``Merhaba Dünya`` yazmamızı sağlıyor. Bu yazılım kendi içerisinde yalnızca ``belaba`` kabuk betiğini içeriyor ve oluşturacağımız ``.tar.gz`` arşivinde ``LICENCE`` dışında yalnızca bu betik var. Bu yazılımın sürüm numarasını ``0.1`` olarak düşünebiliriz. 
 
-__bello__ yazılımını dağıtıma hazırlayalım:
+__belaba__ yazılımını dağıtıma hazırlayalım:
 
 . Dosyaları bir dizine yerleştirin: 
 +
