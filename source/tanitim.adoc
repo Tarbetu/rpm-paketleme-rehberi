@@ -7,17 +7,17 @@ Kaynak kodunu RPM paketlemek için hazırlamak.:: Yazılım geliştirmek konusun
 xref:yazilimi-paketlemeye-hazirlamak[].
 
 Kaynak kodunu RPM olarak paketlemek.:: Bu kısım paketlerini RPM olarak paketlemek isteyen yazılımcılar içindir. Buyrun:
-xref:yazilim-paketlemek[].
+xref:yazilimi-paketlemek[].
 
 Gelişmiş paketleme senaryoları.:: Bu kısım, RPM paketçilerinin karşısına çıkan 
 zorlu RPM paketleme senaryoları için bir kaynakçadır. xref:ileri-duzey-konular[] kısmını inceleyin.
 
 ifdef::community[]
 [[pdf-version]]
-== PDF Version
+== PDF Versiyonu
 
 Dilerseniz şu adresten PDF versiyonunu inceleyebilirsiniz:
-https://rpm-packaging-guide.github.io/rpm-packaging-guide.pdf
+https://tarbetu.github.io/rpm_paketleme/rpm-packaging-guide.pdf
 Kendime not: Yayından sonra link Türkçeleşecek
 endif::community[]
 
@@ -25,9 +25,8 @@ endif::community[]
 
 Bu doküman anlatımı kolaylaştırmak üzere şöyle anahtarlar kullanır:
 
-* Bloklar hâlindeki yerleştirilmiş kaynak kodlarını içeren, komut çıktısını ve içeriğini barındıran metin dosyaları (Kötü çeviri):
-//* Command output and contents of text files, including source code, are placed
-//in blocks:
+* Bloklar hâlindeki yerleştirilmiş kaynak kodlarını içeren, komut çıktısını ve içeriğini barındıran metin dosyaları:
+
 +
 [source,bash]
 ----

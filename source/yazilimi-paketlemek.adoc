@@ -169,7 +169,8 @@ Daha fazla bilgi için xref:tetikleyiciler-ve-betikciler[] kısmını okuyabilir
 
 RPM paketleme bağlamında, "buildroot" bir 
 ifdef::community[https://en.wikipedia.org/wiki/Chroot[chroot]]
-ifdef::rhel[chroot] ortamıdır. Bu ortam, dosya sistemi içerisindeki paketi kuracak tarafın sisteminin kök dizinini temsil eden derleme yapıları dizinine yerleştirir. Yerleştirme düzeni son kullanıcının __Dosya Sistemi Hiyerarşisi__ standartlarına uygun olmalıdır. 
+ifdef::rhel[chroot] 
+ortamıdır. Bu ortam, dosya sistemi içerisindeki paketi kuracak tarafın sisteminin kök dizinini temsil eden derleme yapıları dizinine yerleştirir. Yerleştirme düzeni son kullanıcının __Dosya Sistemi Hiyerarşisi__ standartlarına uygun olmalıdır. 
 
 "Buildroot" içerisine eklenen dosyalar https://en.wikipedia.org/wiki/Cpio[cpio] arşivine dönüştürülür ki bu RPM'in temel parçasıdır. RPM paketi, son kullanıcının sistemine kurulduğu zaman dizindeki dosyalar hiyerarşiye uygun olarak kök dizin içerisine çıkartılır. 
 
@@ -382,8 +383,8 @@ Summary:        Bash ile Yazılmış Bir Merhaba Dünya örneği
 +
 * ``License`` kısmı, yazılımın kaynak kodundaki 
 ifdef::community[https://tr.wikipedia.org/wiki/Yazılım_lisansı[Software License]]
-ifdef::rhel[Software License]
-lisansı ile ilişkili olmalıdır. 
+ifdef::rhel[yazılım lisansı]
+ile ilişkili olmalıdır. 
 +
 ifdef::community[]
 ``License`` bölümü için şu formatı takip ediniz:
