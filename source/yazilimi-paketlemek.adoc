@@ -176,7 +176,7 @@ ortamıdır. Bu ortam, dosya sistemi içerisindeki paketi kuracak tarafın siste
 
 [NOTE]
 ====
-// Geçmişte, `%buildroot` makrosunun `%~/rpmmacros` içerisine tanımlanması veya SPEC dosyasında `BuildRoot` belirtilmesi tavsiye edilirdi. RedHat Enterprise Linux 6'dan itibaren `rpmbuild` yazılımı kendi varsayılanlarını benimsedi. Bu varsayılanları yeniden tanımlamak belli başlı sıkıntılar doğurabileceğinden, Red Hat bu makroyu değiştirmenizi tavsiye etmez. `%{buildroot}` makrosunu `rpmbuild` dizinindeki varsayılanıyla kullanabilirsiniz.
+Geçmişte, `%buildroot` makrosunun `%~/rpmmacros` içerisine tanımlanması veya SPEC dosyasında `BuildRoot` belirtilmesi tavsiye edilirdi. RedHat Enterprise Linux 6'dan itibaren `rpmbuild` yazılımı kendi varsayılanlarını benimsedi. Bu varsayılanları yeniden tanımlamak belli başlı sıkıntılar doğurabileceğinden, RedHat bu makroyu değiştirmenizi tavsiye etmez. `%{buildroot}` makrosunu `rpmbuild` dizinindeki varsayılanıyla kullanabilirsiniz.
 ====
 
 [[rpm-makrolari]]

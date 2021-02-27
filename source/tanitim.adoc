@@ -18,7 +18,6 @@ ifdef::community[]
 
 Dilerseniz şu adresten PDF versiyonunu inceleyebilirsiniz:
 https://tarbetu.github.io/rpm_paketleme/rpm-packaging-guide.pdf
-Kendime not: Yayından sonra link Türkçeleşecek
 endif::community[]
 
 == Doküman Anahtarları
